@@ -7,12 +7,8 @@
     <style>
         :root {
             --orange: #ff6b00;
-            --orange-glow: #ff8c00;
             --dark-bg: #0a0a0a;
             --card-bg: #111111;
-            --text: #ffffff;
-            --text-secondary: #b0b0b0;
-            --border: #222222;
         }
 
         * {
@@ -24,15 +20,13 @@
         body {
             font-family: 'Arial', 'Helvetica Neue', sans-serif;
             background: var(--dark-bg);
-            color: var(--text);
+            color: white;
             min-height: 100vh;
             background-image: 
                 radial-gradient(circle at 20% 20%, rgba(255,107,0,0.08) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(255,107,0,0.05) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(255,255,255,0.02) 0%, transparent 70%);
+                radial-gradient(circle at 80% 80%, rgba(255,107,0,0.05) 0%, transparent 50%);
         }
 
-        /* ==================== MAIN CONTAINER ==================== */
         .container {
             max-width: 1300px;
             margin: 0 auto;
@@ -41,7 +35,7 @@
         }
 
         /* ==================== MAIN PAGE ==================== */
-        .main-page {
+        #mainPage {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -82,7 +76,6 @@
             margin-bottom: 60px;
         }
 
-        /* ==================== 4 BUTTON GRID ==================== */
         .button-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -99,7 +92,6 @@
             padding: 40px 20px;
             cursor: pointer;
             transition: all 0.4s ease;
-            text-decoration: none;
             color: white;
             position: relative;
             overflow: hidden;
@@ -158,7 +150,6 @@
             text-transform: uppercase;
         }
 
-        /* Stats Bar */
         .stats-bar {
             display: flex;
             gap: 60px;
@@ -187,14 +178,7 @@
         /* ==================== WORKOUT PAGES ==================== */
         .workout-page {
             display: none;
-        }
-
-        .workout-page.active {
-            display: block;
-        }
-
-        .main-page.hidden {
-            display: none;
+            padding-top: 20px;
         }
 
         .page-header {
@@ -235,7 +219,6 @@
             box-shadow: 0 0 30px rgba(255,107,0,0.4);
         }
 
-        /* Exercise Cards */
         .exercises {
             display: flex;
             flex-direction: column;
@@ -266,6 +249,7 @@
             object-fit: cover;
             border: 2px solid #222;
             flex-shrink: 0;
+            background: #1a1a1a;
         }
 
         .exercise-info {
@@ -335,7 +319,7 @@
     <div class="container">
         
         <!-- ==================== MAIN PAGE ==================== -->
-        <div class="main-page" id="mainPage">
+        <div id="mainPage">
             <div class="main-badge">🏆 Premium Training Program</div>
             <h1 class="main-title">FITFORGE</h1>
             <p class="main-subtitle">Build Your Legacy</p>
@@ -391,7 +375,7 @@
         </div>
 
         <!-- ==================== DAY 1 PAGE ==================== -->
-        <div class="workout-page" id="day1Page">
+        <div id="day1Page" class="workout-page">
             <div class="page-header">
                 <h2 class="page-title"><span>DAY 1</span> — CHEST & TRICEPS</h2>
                 <button class="back-btn" onclick="goHome()">← BACK TO HOME</button>
@@ -399,12 +383,8 @@
             <div class="exercises">
                 <div class="exercise-card">
                     <img src="https://images.pexels.com/photos/4164517/pexels-photo-4164517.jpeg?auto=compress&cs=tinysrgb&w=600" 
-                         alt="Bench Press Exercise" 
-                         class="exercise-img"
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div style="display:none; width:280px; height:280px; background:#1a1a1a; border-radius:15px; align-items:center; justify-content:center; font-size:60px;">
-                        🏋️
-                    </div>
+                         alt="Bench Press" class="exercise-img"
+                         onerror="this.src='https://via.placeholder.com/280x280/1a1a1a/ff6b00?text=Bench+Press'">
                     <div class="exercise-info">
                         <h3 class="exercise-name">Barbell Bench Press</h3>
                         <div class="exercise-sets">4 SETS × 8-10 REPS</div>
@@ -416,12 +396,8 @@
 
                 <div class="exercise-card">
                     <img src="https://images.pexels.com/photos/4164762/pexels-photo-4164762.jpeg?auto=compress&cs=tinysrgb&w=600" 
-                         alt="Incline Dumbbell Press" 
-                         class="exercise-img"
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div style="display:none; width:280px; height:280px; background:#1a1a1a; border-radius:15px; align-items:center; justify-content:center; font-size:60px;">
-                        🏋️
-                    </div>
+                         alt="Incline Press" class="exercise-img"
+                         onerror="this.src='https://via.placeholder.com/280x280/1a1a1a/ff6b00?text=Incline+Press'">
                     <div class="exercise-info">
                         <h3 class="exercise-name">Incline Dumbbell Press</h3>
                         <div class="exercise-sets">3 SETS × 10-12 REPS</div>
@@ -433,12 +409,8 @@
 
                 <div class="exercise-card">
                     <img src="https://images.pexels.com/photos/4164515/pexels-photo-4164515.jpeg?auto=compress&cs=tinysrgb&w=600" 
-                         alt="Tricep Dips" 
-                         class="exercise-img"
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div style="display:none; width:280px; height:280px; background:#1a1a1a; border-radius:15px; align-items:center; justify-content:center; font-size:60px;">
-                        💪
-                    </div>
+                         alt="Tricep Dips" class="exercise-img"
+                         onerror="this.src='https://via.placeholder.com/280x280/1a1a1a/ff6b00?text=Tricep+Dips'">
                     <div class="exercise-info">
                         <h3 class="exercise-name">Tricep Dips</h3>
                         <div class="exercise-sets">3 SETS × 12-15 REPS</div>
@@ -451,7 +423,7 @@
         </div>
 
         <!-- ==================== DAY 2 PAGE ==================== -->
-        <div class="workout-page" id="day2Page">
+        <div id="day2Page" class="workout-page">
             <div class="page-header">
                 <h2 class="page-title"><span>DAY 2</span> — BACK & BICEPS</h2>
                 <button class="back-btn" onclick="goHome()">← BACK TO HOME</button>
@@ -459,12 +431,8 @@
             <div class="exercises">
                 <div class="exercise-card">
                     <img src="https://images.pexels.com/photos/4164518/pexels-photo-4164518.jpeg?auto=compress&cs=tinysrgb&w=600" 
-                         alt="Pull Ups Exercise" 
-                         class="exercise-img"
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div style="display:none; width:280px; height:280px; background:#1a1a1a; border-radius:15px; align-items:center; justify-content:center; font-size:60px;">
-                        🔥
-                    </div>
+                         alt="Pull Ups" class="exercise-img"
+                         onerror="this.src='https://via.placeholder.com/280x280/1a1a1a/ff6b00?text=Pull+Ups'">
                     <div class="exercise-info">
                         <h3 class="exercise-name">Pull-Ups</h3>
                         <div class="exercise-sets">4 SETS × 6-10 REPS</div>
@@ -476,12 +444,8 @@
 
                 <div class="exercise-card">
                     <img src="https://images.pexels.com/photos/4164765/pexels-photo-4164765.jpeg?auto=compress&cs=tinysrgb&w=600" 
-                         alt="Barbell Row" 
-                         class="exercise-img"
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div style="display:none; width:280px; height:280px; background:#1a1a1a; border-radius:15px; align-items:center; justify-content:center; font-size:60px;">
-                        🏋️
-                    </div>
+                         alt="Barbell Row" class="exercise-img"
+                         onerror="this.src='https://via.placeholder.com/280x280/1a1a1a/ff6b00?text=Barbell+Row'">
                     <div class="exercise-info">
                         <h3 class="exercise-name">Barbell Row</h3>
                         <div class="exercise-sets">4 SETS × 8-10 REPS</div>
@@ -493,12 +457,8 @@
 
                 <div class="exercise-card">
                     <img src="https://images.pexels.com/photos/4164519/pexels-photo-4164519.jpeg?auto=compress&cs=tinysrgb&w=600" 
-                         alt="Dumbbell Curl" 
-                         class="exercise-img"
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div style="display:none; width:280px; height:280px; background:#1a1a1a; border-radius:15px; align-items:center; justify-content:center; font-size:60px;">
-                        💪
-                    </div>
+                         alt="Dumbbell Curl" class="exercise-img"
+                         onerror="this.src='https://via.placeholder.com/280x280/1a1a1a/ff6b00?text=Dumbbell+Curl'">
                     <div class="exercise-info">
                         <h3 class="exercise-name">Dumbbell Bicep Curl</h3>
                         <div class="exercise-sets">3 SETS × 10-12 REPS</div>
@@ -511,7 +471,7 @@
         </div>
 
         <!-- ==================== DAY 3 PAGE ==================== -->
-        <div class="workout-page" id="day3Page">
+        <div id="day3Page" class="workout-page">
             <div class="page-header">
                 <h2 class="page-title"><span>DAY 3</span> — LEGS & CORE</h2>
                 <button class="back-btn" onclick="goHome()">← BACK TO HOME</button>
@@ -519,7 +479,36 @@
             <div class="exercises">
                 <div class="exercise-card">
                     <img src="https://images.pexels.com/photos/4164768/pexels-photo-4164768.jpeg?auto=compress&cs=tinysrgb&w=600" 
-                         alt="Barbell Squat" 
-                         class="exercise-img"
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div style="display:none; width:280px; height:280px; background:#1a1a1a; border-radius:1
+                         alt="Barbell Squat" class="exercise-img"
+                         onerror="this.src='https://via.placeholder.com/280x280/1a1a1a/ff6b00?text=Barbell+Squat'">
+                    <div class="exercise-info">
+                        <h3 class="exercise-name">Barbell Squat</h3>
+                        <div class="exercise-sets">4 SETS × 8-10 REPS</div>
+                        <div class="exercise-instruction">
+                            📸 <strong>How to do it:</strong> Place the barbell across your upper back. Stand with feet shoulder-width apart. Squat down until thighs are parallel to the floor. Drive through your heels to stand back up.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercise-card">
+                    <img src="https://images.pexels.com/photos/4164770/pexels-photo-4164770.jpeg?auto=compress&cs=tinysrgb&w=600" 
+                         alt="Walking Lunges" class="exercise-img"
+                         onerror="this.src='https://via.placeholder.com/280x280/1a1a1a/ff6b00?text=Walking+Lunges'">
+                    <div class="exercise-info">
+                        <h3 class="exercise-name">Walking Lunges</h3>
+                        <div class="exercise-sets">3 SETS × 12 PER LEG</div>
+                        <div class="exercise-instruction">
+                            📸 <strong>How to do it:</strong> Step forward with one leg and lower your hips until both knees are at 90 degrees. Keep your front knee aligned with your ankle. Push through the front heel to step forward into the next lunge.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercise-card">
+                    <img src="https://images.pexels.com/photos/4164771/pexels-photo-4164771.jpeg?auto=compress&cs=tinysrgb&w=600" 
+                         alt="Plank" class="exercise-img"
+                         onerror="this.src='https://via.placeholder.com/280x280/1a1a1a/ff6b00?text=Plank'">
+                    <div class="exercise-info">
+                        <h3 class="exercise-name">Forearm Plank</h3>
+                        <div class="exercise-sets">3 SETS × 45-60 SECONDS</div>
+                        <div class="exercise-instruction">
+                            📸 <strong>How to do it:</strong> Place forearms on the ground with 
