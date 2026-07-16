@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>FitZone | 4-Day Workout Split</title>
+  <!-- Font Awesome 6 for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+      background: linear-gradient(145deg, #1a1e2b 0%, #2a2f3f 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      margin: 0;
+    }
+
+    /* main card container */
+    .app-container {
+      max-width: 1100px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-radius: 3.5rem;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    h1 {
+      text-align: center;
+      font-weight: 700;
+      font-size: 2.8rem;
+      letter-spacing: 2px;
+      color: #f5e9d8;
+      text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      margin-bottom: 0.5rem;
+      word-break: break-word;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #b9c6da;
+      margin-bottom: 2.8rem;
+      font-weight: 400;
+      font-size: 1.2rem;
+      border-bottom: 1px dashed rgba(255,255,255,0.3);
+      padding-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    /* 4 cool buttons grid */
+    .day-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.8rem;
+      margin-bottom: 2rem;
+    }
+
+    .day-btn {
+      background: linear-gradient(135deg, #232837 0%, #1b1f2b 100%);
+      border: none;
+      border-radius: 2.5rem;
+      padding: 2.2rem 0.8rem;
+      font-weight: 700;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #e0e7ff;
+      box-shadow: 0 12px 25px rgba(0,0,0,0.7), 0 0 0 2px rgba(255, 140, 0, 0.4), 0 0 15px rgba(255, 140, 0, 0.5);
+      transition: all 0.25s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.7rem;
+      backdrop-filter: blur(5px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .day-btn i {
+      font-size: 2.4rem;
+      color: #ffa500;
+      filter: drop-shadow(0 0 8px #ff8c00);
+      transition: transform 0.3s;
+    }
+
+    .day-btn:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 30px rgba(0,0,0,0.8), 0 0 0 3px #ffb347, 0 0 25px #ff8c00;
+      background: linear-gradient(135deg, #2f3547 0%, #262b3a 100%);
+      color: white;
+    }
+
+    .day-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 8px 15px rgba(0,0,0,0.7), 0 0 0 2px #ffa500;
+    }
+
+    /* page sections (hidden by default) */
+    .page {
+      display: none;
+      animation: fadeSlide 0.4s ease;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    @keyframes fadeSlide {
+      0% { opacity: 0.6; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* exercise card design */
+    .exercise-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      margin: 1.8rem 0 2.2rem;
+    }
+
+    .exercise-card {
+      background: rgba(20, 22, 31, 0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 2.5rem;
+      padding: 1.5rem 1.8rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1.8rem;
+      border: 1px solid rgba(255, 140, 0, 0.35);
+      box-shadow: 0 15px 25px rgba(0,0,0,0.6);
+      transition: all 0.2s;
+    }
+
+    .exercise-card:hover {
+      border-color: #ffb74d;
+      box-shadow: 0 18px 30px rgba(255, 140, 0, 0.3);
+    }
+
+    .exercise-icon {
+      background: #2f3542;
+      border-radius: 2rem;
+      width: 110px;
+      height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.8rem;
+      color: #ffa500;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.6), 0 8px 15px rgba(0,0,0,0.5);
+      background: radial-gradient(circle at 30% 30%, #434a5c, #1e212b);
+      flex-shrink: 0;
+    }
+
+    .exercise-details {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .exercise-details h3 {
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: #fadfad;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.5px;
+    }
+
+    .sets-badge {
+      background: #ff8c00;
+      color: #0a0c14;
+      font-weight: 800;
+      padding: 0.4rem 1.2rem;
+      border-radius: 3rem;
+      display: inline-block;
+      font-size: 1.2rem;
+      margin: 0.6rem 0 0.3rem;
+      box-shadow: 0 0 15px #ff8c00;
+      letter-spacing: 1px;
+    }
+
+    .instruction {
+      color: #ccd6f0;
+      margin-top: 0.5rem;
+      font-style: italic;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(0,0,0,0.3);
+      padding: 0.4rem 0.9rem;
+      border-radius: 2rem;
+    }
+
+    .back-home-btn {
+      background: transparent;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      color: #f0e6d2;
+      font-weight: 700;
+      font-size: 1.2rem;
+      padding: 0.9rem 2.2rem;
+      border-radius: 3rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      backdrop-filter: blur(10px);
+      transition: 0.3s;
+      margin-top: 0.5rem;
+      letter-spacing: 1px;
+      background: rgba(0,0,0,0.4);
+    }
+
+    .back-home-btn:hover {
+      background: #ff8c00;
+      border-color: #ff8c00;
+      color: #0b0b0f;
+      box-shadow: 0 0 20px #ff8c00;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.2rem;
+    }
+
+    .page-header h2 {
+      font-size: 2.4rem;
+      color: #ffb24d;
+      text-shadow: 0 2px 8px black;
+    }
+
+    @media (max-width: 750px) {
+      .day-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.2rem;
+      }
+      .app-container {
+        padding: 1.8rem;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .exercise-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="app-container" id="appRoot">
+  <!-- ========== MAIN PAGE (Home) ========== -->
+  <div id="mainPage" class="page active">
+    <h1>💪 IRON DISCIPLINE</h1>
+    <div class="subtitle">
+      <i class="fas fa-calendar-alt"></i> 4-DAY SPLIT · PICK YOUR SESSION
+    </div>
+    <div class="day-grid">
+      <button class="day-btn" onclick="navigateTo('day1')">
+        <i class="fas fa-dumbbell"></i> DAY 1
+        <span style="font-size:0.9rem; font-weight:400;">Chest & Triceps</span>
+      </button>
+      <button class="day-btn" onclick="navigateTo('day2')">
+        <i class="fas fa-fire"></i> DAY 2
+        <span style="font-size:0.9rem; font-weight:400;">Back & Biceps</span>
+      </button>
+      <button class="day-btn" onclick="navigateTo('day3')">
+        <i class="fas fa-running"></i> DAY 3
+        <span style="font-size:0.9rem; font-weight:400;">Legs & Core</span>
+      </button>
+      <button class="day-btn" onclick="navigateTo('day4')">
+        <i class="fas fa-heartbeat"></i> DAY 4
+        <span style="font-size:0.9rem; font-weight:400;">Shoulders & Arms</span>
+      </button>
+    </div>
+    <div style="text-align: center; margin-top: 1.2rem; color: #aaa;">
+      <i class="fas fa-chevron-up"></i> tap a day to see daily exercises <i class="fas fa-chevron-up"></i>
+    </div>
+  </div>
+
+  <!-- ========== DAY 1 PAGE ========== -->
+  <div id="day1Page" class="page">
+    <div class="page-header">
+      <h2><i class="fas fa-dumbbell" style="margin-right: 10px;"></i>DAY 1 · CHEST & TRICEPS</h2>
+      <button class="back-home-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i> Back to Days</button>
+    </div>
+    <div class="exercise-list">
+      <div class="exercise-card">
+        <div class="exercise-icon"><i class="fas fa-weight-hanging"></i></div>
+        <div class="exercise-details">
+          <h3>Bench Press</h3>
+          <span class="sets-badge">4 SETS × 8-10 REPS</span>
+          <div class="instruction"><i class="fas fa-camera"></i> Lie flat, grip bar, lower to chest, press up explosively.</div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-icon"><i class="fas fa-hand-rock"></i></div>
+        <div class="exercise-details">
+          <h3>Incline Dumbbell Press</h3>
+          <span class="sets-badge">3 SETS × 10-12 REPS</span>
+          <div class="instruction"><i class="fas fa-camera"></i> Incline bench, dumbbells at chest, press up, squeeze upper chest.</div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-icon"><i class="fas fa-grip-lines"></i></div>
+        <div class="exercise-details">
+          <h3>Tricep Dips</h3>
+          <span class="sets-badge">3 SETS × 12-15 REPS</span>
+          <div class="instruction"><i class="fas fa-camera"></i> Parallel bars or bench, lower body, extend arms fully.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== DAY 2 PAGE ========== -->
+  <div id="day2Page" class="page">
+    <div class="page-header">
+      <h2><i class="fas fa-fire" style="margin-right: 10px;"></i>DAY 2 · BACK & BICEPS</h2>
+      <button class="back-home-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i> Back to Days</button>
+    </div>
+    <div class="exercise-list">
+      <div class="exercise-card">
+        <div class="exercise-icon"><i class="fas fa-anchor"></i></div>
+        <div class="exercise-details">
+          <h3>Pull-Ups</h3>
+          <span class="sets-badge">4 SETS × 6-10 REPS</span>
+          <div class="instruction"><i class="fas fa-camera"></i> Overhand grip, pull chin above bar, control descent.</div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-icon"><i class="fas fa-dumbbell"></i></div>
+        <div class="exercise-details">
+          <h3>Barbell Row</h3>
+          <span class="sets-badge">4 SETS × 8-10 REPS</span>
+          <div class="instruction"><i class="fas fa-camera"></i> Bent-over, pull bar to lower chest, squeeze back.</div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-icon"><i class="fas fa-fist-raised"></i></div>
+        <div class="exercise-details">
+          <h3>Dumbbell Curl</h3>
+          <span class="sets-badge">3 SETS × 10-12 REPS</span>
+          <div class="instruction"><i class="fas fa-camera"></i> Stand tall, curl weights, keep elbows fixed.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== DAY 3 PAGE ========== -->
+  <div id="day3Page" class="page">
+    <div class="page-header">
+      <h2><i class="fas fa-running" style="margin-right: 10px;"></i>DAY 3 · LEGS & CORE</h2>
+      <button class="back-home-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i> Back to Days</button>
+    </div>
+    <div class="exercise-list">
+      <div class="exercise-card">
+        <div class="exercise-icon"><i class="fas fa-shoe-prints"></i></div>
+        <div class="exercise-details">
+          <h3>Barbell Squat</h3>
+          <span class="sets-badge">4 SETS × 8-10 REPS</span>
+          <div class="instruction"><i class="fas fa-camera"></i> Bar on shoulders, squat to parallel, drive through heels.</div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-icon"><i class="fas fa-hiking"></i></div>
+        <div class="exercise-details">
+          <h3>Lunges</h3>
+          <span class="sets-badge">3 SETS × 12 PER LEG</span>
+          <div class="instruction"><i class="fas fa-camera"></i> Step forward, lower back knee, keep torso upright.</div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-icon"><i class="fas fa-child"></i></div>
+        <div class="exercise-details">
+          <h3>Plank</h3>
+          <span class="sets-badge">3 SETS × 45-60 SEC</span>
+          <div class="instruction"><i class="fas fa-camera"></i> Forearm position, body straight, engage core.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== DAY 4 PAGE ========== -->
+  <div id="day4Page" class="page">
+    <div class="page-header">
+      <h2><i class="fas fa-heartbeat" style="margin-right: 10px;"></i>DAY 4 · SHOULDERS & ARMS</h2>
+      <button class="back-home-btn" onclick="goHome()"><i class="fas fa-arrow-left"></i> Back to Days</button>
+    </div>
+    <div class="exercise-list">
+      <div class="exercise-card">
+        <div class="exercise-icon"><i class="fas fa-people-arrows"></i></div>
+        <div class="exercise-details">
+          <h3>Overhead Press</h3>
+          <span class="sets-badge">4 SETS × 8-10 REPS</span>
+          <div class="instruction"><i class="fas fa-camera"></i> Barbell/dumbbells, press overhead, lock out arms.</div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-icon"><i class="fas fa-expand-arrows-alt"></i></div>
+        <div class="exercise-details">
+          <h3>Lateral Raises</h3>
+          <span class="sets-badge">3 SETS × 12-15 REPS</span>
+          <div class="instruction"><i class="fas fa-camera"></i> Raise dumbbells to sides, slight bend in elbows.</div>
+        </div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-icon"><i class="fas fa-skull"></i></div>
+        <div class="exercise-details">
+          <h3>Skull Crushers</h3>
+          <span class="sets-badge">3 SETS × 10-12 REPS</span>
+          <div class="instruction"><i class="fas fa-camera"></i> Lying tricep extension, lower bar to forehead, extend.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // Keep track of current page for navigation
+    const pages = {
+      main: document.getElementById('mainPage'),
+      day1: document.getElementById('day1Page'),
+      day2: document.getElementById('day2Page'),
+      day3: document.getElementById('day3Page'),
+      day4: document.getElementById('day4Page')
+    };
+
+    // Function to hide all pages and show selected
+    window.navigateTo = function(pageId) {
+      // Hide all pages
+      Object.values(pages).forEach(page => {
+        if (page) page.classList.remove('active');
+      });
+      
+      // Show target page
+      const targetPage = document.getElementById(pageId + 'Page');
+      if (targetPage) {
+        targetPage.classList.add('active');
+      }
+      
+      // Optional: scroll to top smooth
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.goHome = function() {
+      // Hide all pages, then show main
+      Object.values(pages).forEach(page => {
+        if (page) page.classList.remove('active');
+      });
+      if (pages.main) {
+        pages.main.classList.add('active');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // Ensure main page is active on load (already set via html class, but for safety)
+    // Also handle if someone clicks using keyboard etc.
+    document.addEventListener('DOMContentLoaded', function() {
+      // If no active page (just in case), set main active
+      if (!document.querySelector('.page.active')) {
+        if (pages.main) pages.main.classList.add('active');
+      }
+    });
+
+    // For better UX: the picture reference is represented by icon and instruction text,
+    // mimicking visual guidance as requested.
+  })();
+</script>
+</body>
+</html>
