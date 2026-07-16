@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FITFORGE PRO | 7-Day Gym Split</title>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --card: #111;
+      --orange: #ff6b00;
+      --text: #fff;
+      --text-secondary: #aaa;
+      --border: #222;
+    }
+    .light-mode {
+      --bg: #f5f5f5;
+      --card: #fff;
+      --text: #1a1a1a;
+      --text-secondary: #555;
+      --border: #ddd;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      scroll-behavior: smooth;
+      transition: background 0.3s, color 0.3s;
+      padding-bottom: 70px;
+    }
+    .nav {
+      position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.92);
+      padding: 10px 5px; z-index: 1000;
+      border-bottom: 1px solid var(--border);
+      display: flex; justify-content: center; flex-wrap: wrap; gap: 5px;
+      align-items: center; backdrop-filter: blur(10px);
+    }
+    .nav a, .nav button {
+      color: var(--text); text-decoration: none; font-weight: bold;
+      padding: 8px 12px; border-radius: 20px; border: none;
+      background: transparent; cursor: pointer; font-size: 0.85rem;
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    .nav a:hover, .nav button:hover { background: var(--orange); color: #000; }
+    .floating-controls {
+      position: fixed; bottom: 20px; right: 20px; z-index: 999;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .float-btn {
+      width: 44px; height: 44px; border-radius: 50%; background: var(--orange);
+      color: #000; border: none; font-size: 1.2rem; cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255,107,0,0.4);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .section {
+      min-height: 100vh; padding: 100px 20px 40px;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    #home { justify-content: center; text-align: center; }
+    .main-title {
+      font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 900;
+      background: linear-gradient(to right, #fff, var(--orange), #fff);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-bottom: 0.5rem;
+    }
+    .subtitle { color: var(--text-secondary); letter-spacing: 5px; margin-bottom: 30px; }
+    .grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 15px; max-width: 900px; width: 100%;
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+      padding: 30px 10px; text-align: center; transition: 0.3s;
+      text-decoration: none; color: var(--text); display: block;
+    }
+    .card:hover { border-color: var(--orange); transform: translateY(-8px); box-shadow: 0 15px 30px rgba(255,107,0,0.2); }
+    .card-icon { font-size: 2.5rem; }
+    .card-num { font-size: 2.2rem; font-weight: 900; color: var(--orange); }
+    .card-label { font-weight: bold; letter-spacing: 2px; margin-top: 5px; }
+    .card-muscle { font-size: 0.8rem; color: var(--text-secondary); }
+    .section-title { font-size: 2rem; font-weight: 900; margin-bottom: 25px; text-align: center; }
+    .section-title span { color: var(--orange); }
+    .exercise-container { display: flex; flex-direction: column; gap: 20px; max-width: 1000px; width: 100%; }
+    .exercise-box {
+      background: var(--card); border: 1px solid var(--border); border-radius: 15px;
+      padding: 20px; display: flex; gap: 15px; flex-wrap: wrap;
+    }
+    .exercise-box:hover { border-color: var(--orange); }
+    .exercise-img {
+      width: 200px; height: 200px; border-radius: 10px; object-fit: cover;
+      border: 2px solid var(--border); flex-shrink: 0;
+      background: var(--card);
+    }
+    .exercise-content { flex: 1; min-width: 240px; }
+    .exercise-name { font-size: 1.5rem; font-weight: 900; margin-bottom: 8px; }
+    .sets-badge {
+      display: inline-block; background: var(--orange); color: #000;
+      padding: 4px 18px; border-radius: 15px; font-weight: 900; margin-bottom: 10px;
+    }
+    .how-to {
+      color: var(--text-secondary); background: rgba(0,0,0,0.2); padding: 12px;
+      border-radius: 10px; border-left: 3px solid var(--orange); line-height: 1.5; margin-bottom: 12px;
+    }
+    .check-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin: 10px 0; }
+    .set-check { accent-color: var(--orange); transform: scale(1.2); }
+    .sub-text { font-size: 0.8rem; color: var(--text-secondary); font-style: italic; }
+    .vid-link { margin: 8px 0; }
+    .vid-link a { color: var(--orange); text-decoration: underline; font-size: 0.9rem; }
+    .pr-display { margin-top: 8px; font-size: 0.9rem; }
+    .pr-display input { width: 70px; padding: 4px; margin: 0 5px; border-radius: 5px; border: 1px solid var(--border); background: var(--bg); color: var(--text); }
+    .pr-btn { background: var(--orange); color: #000; border: none; padding: 4px 10px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    .back-top {
+      display: inline-block; margin-top: 25px; background: var(--orange); color: #000;
+      padding: 10px 25px; border-radius: 25px; text-decoration: none; font-weight: bold;
+    }
+    .warmup-section { max-width: 1000px; width: 100%; margin: 15px 0; }
+    .warmup-toggle { background: var(--orange); color: #000; padding: 10px 20px; border-radius: 20px; border: none; font-weight: bold; cursor: pointer; }
+    .warmup-content { display: none; background: var(--card); padding: 15px; border-radius: 10px; margin-top: 8px; border: 1px solid var(--border); }
+    .warmup-content.active { display: block; }
+    .timer-modal {
+      display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: var(--card); border: 2px solid var(--orange); border-radius: 15px;
+      padding: 25px; z-index: 2000; text-align: center; min-width: 260px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.8); color: var(--text);
+    }
+    .timer-modal.show { display: block; }
+    .timer-display { font-size: 3.5rem; font-weight: 900; margin: 15px 0; }
+    .timer-controls button { margin: 4px; padding: 8px 16px; border-radius: 20px; border: none; cursor: pointer; font-weight: bold; background: var(--orange); color: #000; }
+    .timer-close { position: absolute; top: 5px; right: 12px; cursor: pointer; font-size: 1.3rem; background: none; border: none; color: var(--text); }
+    .overlay { display: none; position: fixed; top:0;left:0;width:100%;height:100%;background: rgba(0,0,0,0.5); z-index:1500; }
+    .overlay.show { display: block; }
+    .streak-badge { background: var(--orange); color: #000; padding: 4px 12px; border-radius: 15px; font-weight: bold; }
+    .quote-box { font-style: italic; color: var(--text-secondary); margin: 10px 0; font-size: 1.1rem; }
+    .water-tracker { margin-top: 15px; display: flex; align-items: center; gap: 8px; font-size: 1.1rem; }
+    .water-glass { cursor: pointer; font-size: 1.3rem; }
+    .water-glass.filled { color: #00aaff; }
+    .celebration-msg {
+      position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+      background: var(--orange); color: #000; padding: 12px 30px;
+      border-radius: 30px; font-weight: bold; z-index: 3000;
+      animation: fadeOut 4s forwards;
+    }
+    @keyframes fadeOut {
+      0% { opacity: 1; }
+      70% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    @media (max-width: 600px) {
+      .exercise-box { flex-direction: column; }
+      .exercise-img { width: 100%; height: 180px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="nav">
+  <a href="#home" class="home-btn">🏠 FITFORGE</a>
+  <a href="#day1">1</a> <a href="#day2">2</a> <a href="#day3">3</a>
+  <a href="#day4">4</a> <a href="#day5">5</a> <a href="#day6">6</a> <a href="#day7">7</a>
+  <button onclick="toggleDarkMode()">🌓</button>
+  <span class="streak-badge" id="streakDisplay">🔥 0</span>
+  <button onclick="openTimer()">⏱️ Timer</button>
+</div>
+
+<div class="floating-controls">
+  <button class="float-btn" onclick="openTimer()">⏱️</button>
+  <button class="float-btn" onclick="shareWorkout()">📤</button>
+  <button class="float-btn" onclick="toggleMusic()" id="musicToggle">🔇</button>
+</div>
+
+<!-- Timer Modal -->
+<div class="overlay" id="timerOverlay" onclick="closeTimer()"></div>
+<div class="timer-modal" id="timerModal">
+  <button class="timer-close" onclick="closeTimer()">&times;</button>
+  <h3>Rest Timer</h3>
+  <div class="timer-display" id="timerDisplay">01:30</div>
+  <div class="timer-controls">
+    <button onclick="setTimer(60)">60s</button>
+    <button onclick="setTimer(90)">90s</button>
+    <button onclick="setTimer(120)">120s</button>
+    <button onclick="startTimer()">Start</button>
+    <button onclick="pauseTimer()">Pause</button>
+    <button onclick="resetTimer()">Reset</button>
+  </div>
+</div>
+
+<!-- Home -->
+<div class="section" id="home">
+  <h1 class="main-title">FITFORGE</h1>
+  <p class="subtitle">7 DAYS. NO EXCUSES.</p>
+  <div class="quote-box" id="quoteDisplay"></div>
+  <div class="grid" id="homeGrid"></div>
+  <div class="water-tracker">
+    <span>💧 Water:</span>
+    <span class="water-glass" onclick="drinkWater()">🥛</span>
+    <span class="water-glass" onclick="drinkWater()">🥛</span>
+    <span class="water-glass" onclick="drinkWater()">🥛</span>
+    <span class="water-glass" onclick="drinkWater()">🥛</span>
+    <span class="water-glass" onclick="drinkWater()">🥛</span>
+    <span class="water-glass" onclick="drinkWater()">🥛</span>
+    <span class="water-glass" onclick="drinkWater()">🥛</span>
+    <span class="water-glass" onclick="drinkWater()">🥛</span>
+    <span id="waterCount">0/8</span>
+  </div>
+</div>
+
+<!-- Day Sections (exercises injected by JS) -->
+<div class="section" id="day1"><h2 class="section-title"><span>DAY 1</span> — CHEST & TRICEPS</h2><div class="warmup-section"><button class="warmup-toggle" onclick="toggleWarmup('warmup1')">🔥 Warm-Up & Cool-Down</button><div class="warmup-content" id="warmup1"><p><strong>Warm-Up:</strong> 5 min cardio, arm circles, light push-ups.</p><p><strong>Cool-Down:</strong> Chest & tricep stretches.</p></div></div><div class="exercise-container" id="day1-exercises"></div><a href="#home" class="back-top">⬆ BACK TO HOME</a></div>
+<div class="section" id="day2"><h2 class="section-title"><span>DAY 2</span> — BACK & BICEPS</h2><div class="warmup-section"><button class="warmup-toggle" onclick="toggleWarmup('warmup2')">🔥 Warm-Up & Cool-Down</button><div class="warmup-content" id="warmup2"><p><strong>Warm-Up:</strong> Jumping jacks, band rows.</p><p><strong>Cool-Down:</strong> Lat & bicep stretches.</p></div></div><div class="exercise-container" id="day2-exercises"></div><a href="#home" class="back-top">⬆ BACK TO HOME</a></div>
+<div class="section" id="day3"><h2 class="section-title"><span>DAY 3</span> — LEGS</h2><div class="warmup-section"><button class="warmup-toggle" onclick="toggleWarmup('warmup3')">🔥 Warm-Up & Cool-Down</button><div class="warmup-content" id="warmup3"><p><strong>Warm-Up:</strong> Leg swings, bodyweight squats.</p><p><strong>Cool-Down:</strong> Quad & hamstring stretches.</p></div></div><div class="exercise-container" id="day3-exercises"></div><a href="#home" class="back-top">⬆ BACK TO HOME</a></div>
+<div class="section" id="day4"><h2 class="section-title"><span>DAY 4</span> — SHOULDERS</h2><div class="warmup-section"><button class="warmup-toggle" onclick="toggleWarmup('warmup4')">🔥 Warm-Up & Cool-Down</button><div class="warmup-content" id="warmup4"><p><strong>Warm-Up:</strong> Arm swings, band pull-aparts.</p><p><strong>Cool-Down:</strong> Shoulder stretches.</p></div></div><div class="exercise-container" id="day4-exercises"></div><a href="#home" class="back-top">⬆ BACK TO HOME</a></div>
+<div class="section" id="day5"><h2 class="section-title"><span>DAY 5</span> — ARMS</h2><div class="warmup-section"><button class="warmup-toggle" onclick="toggleWarmup('warmup5')">🔥 Warm-Up & Cool-Down</button><div class="warmup-content" id="warmup5"><p><strong>Warm-Up:</strong> Light curls, tricep pushdowns.</p><p><strong>Cool-Down:</strong> Bicep & tricep stretches.</p></div></div><div class="exercise-container" id="day5-exercises"></div><a href="#home" class="back-top">⬆ BACK TO HOME</a></div>
+<div class="section" id="day6"><h2 class="section-title"><span>DAY 6</span> — CORE & CARDIO</h2><div class="warmup-section"><button class="warmup-toggle" onclick="toggleWarmup('warmup6')">🔥 Warm-Up & Cool-Down</button><div class="warmup-content" id="warmup6"><p><strong>Warm-Up:</strong> Light jog, dynamic stretches.</p><p><strong>Cool-Down:</strong> Full-body static stretches.</p></div></div><div class="exercise-container" id="day6-exercises"></div><a href="#home" class="back-top">⬆ BACK TO HOME</a></div>
+<div class="section" id="day7"><h2 class="section-title"><span>DAY 7</span> — FULL BODY</h2><div class="warmup-section"><button class="warmup-toggle" onclick="toggleWarmup('warmup7')">🔥 Warm-Up & Cool-Down</button><div class="warmup-content" id="warmup7"><p><strong>Warm-Up:</strong> 5 min rowing, arm/leg swings.</p><p><strong>Cool-Down:</strong> Yoga flow.</p></div></div><div class="exercise-container" id="day7-exercises"></div><a href="#home" class="back-top">⬆ BACK TO HOME</a></div>
+
+<script>
+// ====================  EXERCISE DATA (7 days, 3 exercises each) ====================
+const exercisesData = {
+  day1: [
+    { name:"Barbell Bench Press", sets:4, reps:"8-10", image:"https://images.pexels.com/photos/4164517/pexels-photo-4164517.jpeg?auto=compress&cs=tinysrgb&w=400", howto:"Lie flat, grip bar wider than shoulder-width. Lower to mid‑chest, press up explosively.", substitute:"Alternative: Dumbbell Bench Press" },
+    { name:"Incline Dumbbell Press", sets:3, reps:"10-12", image:"https://images.pexels.com/photos/4164762/pexels-photo-4164762.jpeg?auto=compress&cs=tinysrgb&w=400", howto:"Set bench to 30‑45°. Press dumbbells from chest, squeeze upper chest.", substitute:"Alternative: Incline Barbell Press" },
+    { name:"Tricep Dips", sets:3, reps:"12-15", image:"https://images.pexels.com/photos/4164515/pexels-photo-4164515.jpeg?auto=compress&cs=tinysrgb&w=400", howto:"Use parallel bars or bench, lower until elbows 90°, push up.", substitute:"Alternative: Close‑Grip Bench Press" }
+  ],
+  day2: [
+    { name:"Pull‑Ups", sets:4, reps:"6-10", image:"https://images.pexels.com/photos/4164518/pexels-photo-4164518.jpeg?auto=compress&cs=tinysrgb&w=400", howto:"Overhand grip, pull chin above bar, control descent.", substitute:"Alternative: Lat Pulldown" },
+    { name:"Barbell Row", sets:4, reps:"8-10", image:"https://images.pexels.com/photos/4164765/pexels-photo-4164765.jpeg?auto=compress&cs=tinysrgb&w=400", howto:"Hinge at hips, back straight, pull bar to lower chest.", substitute:"Alternative: Dumbbell Rows" },
+    { name:"Dumbbell Bicep Curl", sets:3, reps:"10-12", image:"https://images.pexels.com/photos/4164519/pexels-photo-4164519.jpeg?auto=compress&cs=tinysrgb&w=400", howto:"Stand, curl dumbbells keeping elbows fixed.", substitute:"Alternative: Hammer Curl" }
+  ],
+  day3: [
+    { name:"Barbell Squat", sets:4, reps:"8-10", image:"https://images.pexels.com/photos/4164768/pexels-photo-4164768.jpeg?auto=compress&cs=tinysrgb&w=400", howto:"Bar on upper back, squat to parallel, drive through heels.", substitute:"Alternative: Goblet Squats" },
+    { name:"Romanian Deadlift", sets:3, reps:"10-12", image:"https://images.pexels.com/photos/4164770/pexels-photo-4164770.jpeg?auto=compress&cs=tinysrgb&w=400", howto:"Hinge at hips, slight knee bend, lower bar along legs.", substitute:"Alternative: Kettlebell Swings" },
+    { name:"Walking Lunges", sets:3, reps:"12 per leg", image:"https://images.pexels.com/photos/4164771/pexels-photo-4164771.jpeg?auto=compress&cs=tinysrgb&w=400", howto:"Step forward, lower back knee, keep front knee over ankle.", substitute:"Alternative: Stationary Lunges" }
+  ],
+  day4: [
+    { name:"Overhead Press", sets:4, reps:"8-10", image:"https://images.pexels.com/photos/4164772/pexels-photo-4164772.jpeg?auto=compress&cs=tinysrgb&w=400", howto:"Press barbell from shoulders overhead, core tight.", substitute:"Alternative: Seated Dumbbell Press" },
+    { name:"Lateral Raises", sets:3, reps:"12-15", image:"https://images.pexels.com/photos/4164773/pexels-photo-4164773.jpeg?auto=compress&cs=tinysrgb&w=400", howto:"Raise dumbbells to sides until parallel, slight bend in elbows.", substitute:"Alternative: Cable Lateral Raises" },
+    { name:"Face Pulls", sets:3, reps:"15-20", image:"https://images.pexels.com/photos/4164774/pexels-photo-4164774.jpeg?auto=compress&cs=tinysrgb&w=400", howto:"Pull rope towards face, external rotation, squeeze rear delts.", substitute:"Alternative: Band Pull‑Aparts" }
+  ],
+  day5: [
+    { name:"Barbell Curl", sets:4, reps:"8-10", image:"https://images.pexels.com/photos/4164775/pexels-photo-4164775.jpeg?auto=compress&cs=tinysrgb&w=400", howto:"Curl barbell keeping elbows still, squeeze biceps.", substitute:"Alternative: Dumbbell Curl" },
+    { name:"Skull Crushers", sets:3, reps:"10-12", image:"https://images.pexels.com/photos/4164776/pexels-photo-4164776.jpeg?auto=compress&cs=tinysrgb&w=400", howto:"Lower EZ‑bar to forehead, extend arms, elbows pointed up.", substitute:"Alternative: Overhead Tricep Extension" },
+    { name:"Hammer Curl", sets:3, reps:"12-15", image:"https://images.pexels.com/photos/4164777/pexels-photo-4164777.jpeg?auto=compress&cs=tinysrgb&w=400", howto:"Neutral grip, curl dumbbells together.", substitute:"Alternative: Reverse Curl" }
+  ],
+  day6: [
+    { name:"Plank", sets:3, reps:"45-60 sec", image:"https://images.pexels.com/photos/4164778/pexels-photo-4164778.jpeg?auto=compress&cs=tinysrgb&w=400", howto:"Forearms on ground, body straight, brace core.", substitute:"Alternative: Side Plank" },
+    { name:"Russian Twists", sets:3, reps:"20 per side", image:"https://images.pexels.com/photos/4164779/pexels-photo-4164779.jpeg?auto=compress&cs=tinysrgb&w=400", howto:"Sit balanced, twist torso side to side.", substitute:"Alternative: Bicycle Crunches" },
+    { name:"Burpees", sets:3, reps:"12-15", image:"https://images.pexels.com/photos/4164780/pexels-photo-4164780.jpeg?auto=compress&cs=tinysrgb&w=400", howto:"Squat, jump back to plank, jump up.", substitute:"Alternative: Jump Squats" }
+  ],
+  day7: [
+    { name:"Deadlift", sets:4, reps:"6-8", image:"https://images.pexels.com/photos/4164781/pexels-photo-4164781.jpeg?auto=compress&cs=tinysrgb&w=400", howto:"Hip hinge, lift bar from floor, lock out.", substitute:"Alternative: Sumo Deadlift" },
+    { name:"Push Press", sets:3, reps:"8-10", image:"https://images.pexels.com/photos/4164782/pexels-photo-4164782.jpeg?auto=compress&cs=tinysrgb&w=400", howto:"Dip knees, drive bar overhead.", substitute:"Alternative: Strict Press" },
+    { name:"Kettlebell Swing", sets:3, reps:"15-20", image:"https://images.pexels.com/photos/4164783/pexels-photo-4164783.jpeg?auto=compress&cs=tinysrgb&w=400", howto:"Hinge, swing bell to chest height.", substitute:"Alternative: Dumbbell Swing" }
+  ]
+};
+
+// ==================== RENDER FUNCTIONS ====================
+function renderHomeGrid() {
+  const grid = document.getElementById('homeGrid');
+  const labels = ['Chest & Triceps','Back & Biceps','Legs','Shoulders','Arms','Core & Cardio','Full Body'];
+  const icons = ['🔥','⚡','💪','🦅','💪','🧘','🏋️'];
+  grid.innerHTML = Array.from({length:7}, (_, i) => `
+    <a href="#day${i+1}" class="card">
+      <span class="card-icon">${icons[i]}</span>
+      <span class="card-num">${i+1}</span>
+      <div class="card-label">${labels[i]}</div>
+      <div class="card-muscle">Day ${i+1}</div>
+    </a>
+  `).join('');
+}
+
+function renderExercises(day, containerId) {
+  const container = document.getElementById(containerId);
+  if (!container || !exercisesData[day]) return;
+  container.innerH
