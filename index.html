@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FITFORGE PRO | 4-Day Gym Split</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #0a0a0a;
+            color: white;
+            scroll-behavior: smooth;
+        }
+
+        /* ==================== NAVIGATION ==================== */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.95);
+            padding: 15px 0;
+            z-index: 1000;
+            border-bottom: 1px solid #222;
+            text-align: center;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: 0.3s;
+            display: inline-block;
+        }
+
+        .nav a:hover {
+            background: #ff6b00;
+            color: #000;
+        }
+
+        .nav .home-btn {
+            background: #ff6b00;
+            color: #000;
+        }
+
+        /* ==================== SECTIONS ==================== */
+        .section {
+            min-height: 100vh;
+            padding: 100px 40px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #home {
+            justify-content: center;
+            text-align: center;
+        }
+
+        .main-title {
+            font-size: 80px;
+            font-weight: 900;
+            background: linear-gradient(to right, #fff, #ff6b00, #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #888;
+            letter-spacing: 5px;
+            margin-bottom: 60px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        .card {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 20px;
+            padding: 40px 20px;
+            text-align: center;
+            transition: 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            display: block;
+        }
+
+        .card:hover {
+            border-color: #ff6b00;
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255,107,0,0.3);
+        }
+
+        .card-icon {
+            font-size: 50px;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .card-num {
+            font-size: 40px;
+            font-weight: 900;
+            color: #ff6b00;
+        }
+
+        .card-label {
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-top: 5px;
+        }
+
+        .card-muscle {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        /* ==================== WORKOUT SECTIONS ==================== */
+        .workout-section {
+            background: #0a0a0a;
+        }
+
+        .section-title {
+            font-size: 40px;
+            font-weight: 900;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .section-title span {
+            color: #ff6b00;
+        }
+
+        .exercise-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .exercise-box {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .exercise-box:hover {
+            border-color: #ff6b00;
+        }
+
+        .exercise-img {
+            width: 250px;
+            height: 250px;
+            border-radius: 15px;
+            object-fit: cover;
+            border: 2px solid #222;
+            flex-shrink: 0;
+            background: #1a1a1a;
+        }
+
+        .exercise-content {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .exercise-name {
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .sets {
+            display: inline-block;
+            background: #ff6b00;
+            color: #000;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 900;
+            margin-bottom: 15px;
+        }
+
+        .how-to {
+            color: #aaa;
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid #ff6b00;
+            line-height: 1.6;
+        }
+
+        .back-top {
+            display: inline-block;
+            margin-top: 30px;
+            background: #ff6b00;
+            color: #000;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .main-title {
+                font-size: 45px;
+            }
+            .exercise-box {
+                flex-direction: column;
+            }
+            .exercise-img {
+                width: 100%;
+                height: 200px;
+            }
+            .nav a {
+                margin: 5px;
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .main-title {
+                font-size: 32px;
+            }
+            .nav a {
+                padding: 6px 10px;
+                font-size: 12px;
+                margin: 2px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== NAVIGATION BAR ==================== -->
+    <div class="nav">
+        <a href="#home" class="home-btn">🏠 HOME</a>
+        <a href="#day1">🔥 DAY 1</a>
+        <a href="#day2">⚡ DAY 2</a>
+        <a href="#day3">💪 DAY 3</a>
+        <a href="#day4">🎯 DAY 4</a>
+    </div>
+
+    <!-- ==================== HOME SECTION ==================== -->
+    <div class="section" id="home">
+        <h1 class="main-title">FITFORGE</h1>
+        <p class="subtitle">BUILD YOUR LEGACY</p>
+        
+        <div class="grid">
+            <a href="#day1" class="card">
+                <span class="card-icon">🔥</span>
+                <span class="card-num">01</span>
+                <div class="card-label">CHEST DAY</div>
+                <div class="card-muscle">Chest & Triceps</div>
+            </a>
+
+            <a href="#day2" class="card">
+                <span class="card-icon">⚡</span>
+                <span class="card-num">02</span>
+                <div class="card-label">BACK DAY</div>
+                <div class="card-muscle">Back & Biceps</div>
+            </a>
+
+            <a href="#day3" class="card">
+                <span class="card-icon">💪</span>
+                <span class="card-num">03</span>
+                <div class="card-label">LEG DAY</div>
+                <div class="card-muscle">Legs & Core</div>
+            </a>
+
+            <a href="#day4" class="card">
+                <span class="card-icon">🎯</span>
+                <span class="card-num">04</span>
+                <div class="card-label">ARM DAY</div>
+                <div class="card-muscle">Shoulders & Arms</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- ==================== DAY 1 SECTION ==================== -->
+    <div class="section workout-section" id="day1">
+        <h2 class="section-title"><span>DAY 1</span> — CHEST & TRICEPS</h2>
+        <div class="exercise-container">
+            <div class="exercise-box">
+                <img src="https://images.pexels.com/photos/4164517/pexels-photo-4164517.jpeg?auto=compress&cs=tinysrgb&w=600" 
+                     alt="Bench Press" class="exercise-img"
+                     onerror="this.src='https://via.placeholder.com/250x250/1a1a1a/ff6b00?text=Bench+Press'">
+                <div class="exercise-content">
+                    <h3 class="exercise-name">Barbell Bench Press</h3>
+                    <div class="sets">4 SETS × 8-10 REPS</div>
+                    <div class="how-to">
+                        📸 <strong>How to do it:</strong> Lie flat on the bench, feet on floor. Grip barbell wider than shoulder-width. Lower bar to mid-chest, press up explosively. Keep shoulder blades squeezed.
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-box">
+                <img src="https://images.pexels.com/photos/4164762/pexels-photo-4164762.jpeg?auto=compress&cs=tinysrgb&w=600" 
+                     alt="Incline Press" class="exercise-img"
+                     onerror="this.src='https://via.placeholder.com/250x250/1a1a1a/ff6b00?text=Incline+Press'">
+                <div class="exercise-content">
+                    <h3 class="exercise-name">Incline Dumbbell Press</h3>
+                    <div class="sets">3 SETS × 10-12 REPS</div>
+                    <div class="how-to">
+                        📸 <strong>How to do it:</strong> Set bench to 30-45° incline. Hold dumbbells at chest level. Press up until arms extended. Squeeze upper chest at top, lower slowly.
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-box">
+                <img src="https://images.pexels.com/photos/4164515/pexels-photo-4164515.jpeg?auto=compress&cs=tinysrgb&w=600" 
+                     alt="Tricep Dips" class="exercise-img"
+                     onerror="this.src='https://via.placeholder.com/250x250/1a1a1a/ff6b00?text=Tricep+Dips'">
+                <div class="exercise-content">
+                    <h3 class="exercise-name">Tricep Dips</h3>
+                    <div class="sets">3 SETS × 12-15 REPS</div>
+                    <div class="how-to">
+                        📸 <strong>How to do it:</strong> Use parallel bars or bench edge. Lower body until elbows at 90°. Push back up without locking elbows. Keep body close to bars.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="#home" class="back-top">⬆ BACK TO HOME</a>
+    </div>
+
+    <!-- ==================== DAY 2 SECTION ==================== -->
+    <div class="section workout-section" id="day2">
+        <h2 class="section-title"><span>DAY 2</span> — BACK & BICEPS</h2>
+        <div class="exercise-container">
+            <div class="exercise-box">
+                <img src="https://images.pexels.com/photos/4164518/pexels-photo-4164518.jpeg?auto=compress&cs=tinysrgb&w=600" 
+                     alt="Pull Ups" class="exercise-img"
+                     onerror="this.src='https://via.placeholder.com/250x250/1a1a1a/ff6b00?text=Pull+Ups'">
+                <div class="exercise-content">
+                    <h3 class="exercise-name">Pull-Ups</h3>
+                    <div class="sets">4 SETS × 6-10 REPS</div>
+                    <div class="how-to">
+                        📸 <strong>How to do it:</strong> Grip bar with palms facing away, hands shoulder-width. Pull up until chin clears bar. Lower with control. Engage lats throughout.
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-box">
+                <img src="https://images.pexels.com/photos/4164765/pexels-photo-4164765.jpeg?auto=compress&cs=tinysrgb&w=600" 
+                     alt="Barbell Row" class="exercise-img"
+                     onerror="this.src='https://via.placeholder.com/250x250/1a1a1a/ff6b00?text=Barbell+Row'">
+                <div class="exercise-content">
+                    <h3 class="exercise-name">Barbell Row</h3>
+                    <div class="sets">4 SETS × 8-10 REPS</div>
+                    <div class="how-to">
+                        📸 <strong>How to do it:</strong> Hinge at hips with straight back. Pull barbell to lower chest. Squeeze shoulder blades together. Lower weight with control.
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-box">
+                <img src="https://images.pexels.com/photos/4164519/pexels-photo-4164519.jpeg?auto=compress&cs=tinysrgb&w=600" 
+                     alt="Dumbbell Curl" class="exercise-img"
+                     onerror="this.src='https://via.placeholder.com/250x250/1a1a1a/ff6b00?text=Dumbbell+Curl'">
+                <div class="exercise-content">
+                    <h3 class="exercise-name">Dumbbell Bicep Curl</h3>
+                    <div class="sets">3 SETS × 10-12 REPS</div>
+                    <div class="how-to">
+                        📸 <strong>How to do it:</strong> Stand with dumbbells at sides, palms forward. Curl weights up keeping elbows fixed. Squeeze biceps at top, lower slowly.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="#home" class="back-top">⬆ BACK TO HOME</a>
+    </div>
+
+    <!-- ==================== DAY 3 SECTION ==================== -->
+    <div class="section workout-section" id="day3">
+        <h2 class="section-title"><span>DAY 3</span> — LEGS & CORE</h2>
+        <div class="exercise-container">
+            <div class="exercise-box">
+                <img src="https://images.pexels.com/photos/4164768/pexels-photo-4164768.jpeg?auto=compress&cs=tinysrgb&w=600" 
+                     alt="Barbell Squat" class="exercise-img"
+                     onerror="this.src='https://via.placeholder.com/250x250/1a1a1a/ff6b00?text=Barbell+Squat'">
+                <div class="exercise-content">
+                    <h3 class="exercise-name">Barbell Squat</h3>
+                    <div class="sets">4 SETS × 8-10 REPS</div>
+                    <div class="how-to">
+                        📸 <strong>How to do it:</strong> Place barbell across upper back. Feet shoulder-width apart. Squat until thighs parallel to floor. Drive through heels to stand up.
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-box">
+                <img src="https://images.pexels.com/photos/4164770/pexels-photo-4164770.jpeg?auto=compress&cs=tinysrgb&w=600" 
+                     alt="Walking Lunges" class="exercise-img"
+                     onerror="this.src='https://via.placeholder.com/250x250/1a1a1a/ff6b00?text=Walking+Lunges'">
+                <div class="exercise-content">
+                    <h3 class="exercise-name">Walking Lunges</h3>
+                    <div class="sets">3 SETS × 12 PER LEG</div>
+                    <div class="how-to">
+                        📸 <strong>How to do it:</strong> Step forward, lower hips until both knees at 90°. Keep front knee aligned with ankle. Push through front heel to next lunge.
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-box">
+                <img src="https://images.pexels.com/photos/4164771/pexels-photo-4164771.jpeg?auto=compress&cs=tinysrgb&w=600" 
+                     alt="Plank" class="exercise-img"
+                     onerror="this.src='https://via.placeholder.com/250x250/1a1a1a/ff6b00?text=Plank'">
+                <div class="exercise-content">
+                    <h3 class="exercise-name">Forearm Plank</h3>
+                    <div class="sets">3 SETS × 45-60 SECONDS</div>
+                    <div class="how-to">
+                        📸 <strong>How to do it:</strong> Forearms on ground, elbows under shoulders. Body in straight line. Brace core, squeeze glutes, breathe steadily.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="#home" class="back-top">⬆ BACK TO HOME</a>
+    </div>
+
+    <!-- ==================== DAY 4 SECTION ==================== -->
+    <div class="section workout-section" id="day4">
+        <h2 class="section-title"><span>DAY 4</span> — SHOULDERS & ARMS</h2>
+        <div class="exercise-container">
+            <div class="exercise-box">
+                <img src="https://images.pexels.com/photos/4164772/pexels-photo-4164772.jpeg?auto=compress&cs=tinysrgb&w=600" 
+                     alt="Overhead Press" class="exercise-img"
+                     onerror="this.src='https://via.placeholder.com/250x250/1a1a1a/ff6b00?text=Overhead+Press'">
+                <div class="exercise-content">
+                    <h3 class="exercise-name">Overhead Shoulder Press</h3>
+                    <div class="sets">4 SETS × 8-10 REPS</div>
+                    <div class="how-to">
+                        📸 <strong>How to do it:</strong> Hold barbell at shoulder level. Press overhead until arms extended. Lower back with control. Keep core tight.
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-box">
+                <img src="https://images.pexels.com/photos/4164773/pexels-photo-4164773.jpeg?auto=compress&cs=tinysrgb&w=600" 
+                     alt="Lateral Raises" class="exercise-img"
+                     onerror="this.src='https://via.placeholder.com/250x250/1a1a1a/ff6b00?text=Lateral+Raises'">
+                <div class="exercise-content">
+                    <h3 class="exercise-name">Lateral Raises</h3>
+                    <div class="sets">3 SETS × 12-15 REPS</div>
+                    <div class="how-to">
+                        📸 <strong>How to do it:</strong> Hold dumbbells at sides, slight bend in elbows. Raise arms to sides until parallel to floor. Pause, then lower slowly.
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-box">
+                <img src="https://images.pexels.com/photos/4164774/pexels-photo-4164774.jpeg?auto=compress&cs=tinysrgb&w=600" 
+                     alt="Skull Crushers" class="exercise-img"
+                     onerror="this.src='https://via.placeholder.com/250x250/1a1a1a/ff6b00?text=Skull+Crushers'">
+                <div class="exercise-content">
+                    <h3 class="exercise-name">Skull Crushers</h3>
+                    <div class="sets">3 SETS × 10-12 REPS</div>
+                    <div class="how-to">
+                        📸 <strong>How to do it:</strong> Lie on bench, hold EZ-bar above chest. Lower weight toward forehead. Extend arms back up. Keep elbows pointed to ceiling.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="#home" class="back-top">⬆ BACK TO HOME</a>
+    </div>
+
+</body>
+                  </html>
