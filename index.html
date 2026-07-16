@@ -1,493 +1,454 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FITFORGE PRO | 4-Day Gym Split</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#0a0a0a">
+  <link rel="manifest" href="data:application/manifest+json,{...}"> <!-- Will be generated -->
+  <title>FITFORGE PRO | Ultimate Gym Tracker</title>
+  <!-- Confetti library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --card: #111;
+      --orange: #ff6b00;
+      --text: #fff;
+      --text-secondary: #aaa;
+      --border: #222;
+      --shadow: rgba(255,107,0,0.2);
+      --nav-bg: rgba(0,0,0,0.95);
+    }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background: #0a0a0a;
-            color: white;
-            scroll-behavior: smooth;
-        }
+    .light-mode {
+      --bg: #f5f5f5;
+      --card: #fff;
+      --text: #1a1a1a;
+      --text-secondary: #555;
+      --border: #ddd;
+      --nav-bg: rgba(255,255,255,0.95);
+    }
 
-        /* ==================== NAVIGATION ==================== */
-        .nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(0,0,0,0.95);
-            padding: 15px 0;
-            z-index: 1000;
-            border-bottom: 1px solid #222;
-            text-align: center;
-        }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        .nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            font-weight: bold;
-            padding: 10px 20px;
-            border-radius: 25px;
-            transition: 0.3s;
-            display: inline-block;
-        }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      scroll-behavior: smooth;
+      transition: background 0.3s, color 0.3s;
+    }
 
-        .nav a:hover {
-            background: #ff6b00;
-            color: #000;
-        }
+    /* Navigation */
+    .nav {
+      position: fixed; top: 0; width: 100%; background: var(--nav-bg);
+      padding: 12px 10px; z-index: 1000;
+      border-bottom: 1px solid var(--border);
+      display: flex; justify-content: center; flex-wrap: wrap; gap: 8px;
+      align-items: center;
+    }
+    .nav a, .nav button {
+      color: var(--text); text-decoration: none; font-weight: bold;
+      padding: 8px 15px; border-radius: 20px; border: none;
+      background: transparent; cursor: pointer; font-size: 0.9rem;
+      transition: all 0.2s; white-space: nowrap;
+    }
+    .nav .active { background: var(--orange); color: #000; }
+    .nav a:hover, .nav button:hover { background: var(--orange); color: #000; }
+    .nav .home-btn { font-size: 1.1rem; }
 
-        .nav .home-btn {
-            background: #ff6b00;
-            color: #000;
-        }
+    /* Floating Controls */
+    .floating-controls {
+      position: fixed; bottom: 20px; right: 20px; z-index: 999;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .float-btn {
+      width: 48px; height: 48px; border-radius: 50%; background: var(--orange);
+      color: #000; border: none; font-size: 1.4rem; cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255,107,0,0.4);
+      transition: 0.2s; display: flex; align-items: center; justify-content: center;
+    }
+    .float-btn:hover { transform: scale(1.1); }
 
-        /* ==================== SECTIONS ==================== */
-        .section {
-            min-height: 100vh;
-            padding: 100px 40px 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    /* Sections */
+    .section {
+      min-height: 100vh; padding: 100px 20px 40px;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    #home { justify-content: center; text-align: center; }
+    .main-title {
+      font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 900;
+      background: linear-gradient(to right, #fff, var(--orange), #fff);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-bottom: 0.5rem;
+    }
+    .subtitle { color: var(--text-secondary); letter-spacing: 5px; margin-bottom: 40px; }
 
-        #home {
-            justify-content: center;
-            text-align: center;
-        }
+    .grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px; max-width: 900px; width: 100%;
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+      padding: 30px 15px; text-align: center; transition: 0.3s;
+      cursor: pointer; text-decoration: none; color: var(--text); display: block;
+    }
+    .card:hover { border-color: var(--orange); transform: translateY(-8px); box-shadow: 0 15px 30px var(--shadow); }
+    .card-icon { font-size: 2.5rem; }
+    .card-num { font-size: 2.2rem; font-weight: 900; color: var(--orange); }
+    .card-label { font-weight: bold; letter-spacing: 2px; margin-top: 5px; }
+    .card-muscle { font-size: 0.8rem; color: var(--text-secondary); }
 
-        .main-title {
-            font-size: 80px;
-            font-weight: 900;
-            background: linear-gradient(to right, #fff, #ff6b00, #fff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-        }
+    /* Workout Sections */
+    .section-title { font-size: 2.5rem; font-weight: 900; margin-bottom: 30px; text-align: center; }
+    .section-title span { color: var(--orange); }
+    .exercise-container { display: flex; flex-direction: column; gap: 25px; max-width: 1000px; width: 100%; }
+    .exercise-box {
+      background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+      padding: 25px; display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap;
+      transition: 0.3s;
+    }
+    .exercise-box:hover { border-color: var(--orange); }
+    .exercise-img {
+      width: 220px; height: 220px; border-radius: 15px; object-fit: cover;
+      border: 2px solid var(--border); flex-shrink: 0; background: #1a1a1a;
+    }
+    .exercise-content { flex: 1; min-width: 250px; }
+    .exercise-name { font-size: 1.8rem; font-weight: 900; margin-bottom: 10px; }
+    .sets-badge {
+      display: inline-block; background: var(--orange); color: #000;
+      padding: 6px 20px; border-radius: 20px; font-weight: 900; margin-bottom: 12px;
+    }
+    .how-to {
+      color: var(--text-secondary); background: rgba(0,0,0,0.2); padding: 15px;
+      border-radius: 12px; border-left: 3px solid var(--orange); line-height: 1.6; margin-bottom: 15px;
+    }
+    .exercise-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 15px; }
+    .check-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .set-check { width: 20px; height: 20px; accent-color: var(--orange); }
+    .vid-link { color: var(--orange); text-decoration: underline; font-size: 0.9rem; cursor: pointer; }
+    .sub-text { font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px; font-style: italic; }
+    .pr-display { margin-top: 10px; }
+    .pr-display input { width: 80px; padding: 5px; margin-right: 10px; border-radius: 5px; border: 1px solid var(--border); background: var(--bg); color: var(--text); }
+    .pr-btn { background: var(--orange); color: #000; border: none; padding: 6px 12px; border-radius: 10px; cursor: pointer; font-weight: bold; }
 
-        .subtitle {
-            color: #888;
-            letter-spacing: 5px;
-            margin-bottom: 60px;
-        }
+    .back-top {
+      display: inline-block; margin-top: 30px; background: var(--orange); color: #000;
+      padding: 12px 25px; border-radius: 25px; text-decoration: none; font-weight: bold;
+    }
+    .print-btn { background: transparent; border: 2px solid var(--orange); color: var(--orange); padding: 10px 20px; border-radius: 25px; cursor: pointer; margin-top: 20px; }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 25px;
-            max-width: 1100px;
-            width: 100%;
-        }
+    /* Warmup/Cool-down Collapsible */
+    .warmup-section { max-width: 1000px; width: 100%; margin: 20px 0; }
+    .warmup-toggle { background: var(--orange); color: #000; padding: 12px 25px; border-radius: 25px; cursor: pointer; border: none; font-weight: bold; margin: 10px 0; }
+    .warmup-content { display: none; background: var(--card); border-radius: 15px; padding: 20px; margin-top: 10px; border: 1px solid var(--border); }
+    .warmup-content.active { display: block; }
 
-        .card {
-            background: #111;
-            border: 1px solid #222;
-            border-radius: 20px;
-            padding: 40px 20px;
-            text-align: center;
-            transition: 0.3s;
-            cursor: pointer;
-            text-decoration: none;
-            color: white;
-            display: block;
-        }
+    /* Timer Modal */
+    .timer-modal {
+      display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: var(--card); border: 2px solid var(--orange); border-radius: 20px;
+      padding: 30px; z-index: 2000; text-align: center; min-width: 280px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.7);
+    }
+    .timer-modal.show { display: block; }
+    .timer-display { font-size: 4rem; font-weight: 900; margin: 20px 0; }
+    .timer-controls button { margin: 5px; padding: 10px 20px; border-radius: 20px; border: none; cursor: pointer; font-weight: bold; }
+    .timer-close { position: absolute; top: 10px; right: 15px; cursor: pointer; font-size: 1.5rem; }
 
-        .card:hover {
-            border-color: #ff6b00;
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(255,107,0,0.3);
-        }
+    /* Water Tracker */
+    .water-tracker { margin-top: 20px; display: flex; align-items: center; gap: 8px; font-size: 1.2rem; }
+    .water-glass { cursor: pointer; transition: 0.2s; }
+    .water-glass.filled { color: #00aaff; }
 
-        .card-icon {
-            font-size: 50px;
-            display: block;
-            margin-bottom: 15px;
-        }
+    /* Streak & Quote */
+    .streak-badge {
+      background: var(--orange); color: #000; padding: 5px 15px; border-radius: 20px;
+      font-weight: bold; font-size: 0.9rem;
+    }
+    .quote-box { font-style: italic; color: var(--text-secondary); margin: 15px 0; font-size: 1.2rem; }
 
-        .card-num {
-            font-size: 40px;
-            font-weight: 900;
-            color: #ff6b00;
-        }
+    /* Overlay */
+    .overlay { display: none; position: fixed; top:0;left:0;width:100%;height:100%;background: rgba(0,0,0,0.5); z-index:1500; }
+    .overlay.show { display: block; }
 
-        .card-label {
-            font-weight: bold;
-            letter-spacing: 2px;
-            margin-top: 5px;
-        }
-
-        .card-muscle {
-            font-size: 12px;
-            color: #888;
-            margin-top: 5px;
-        }
-
-        /* ==================== WORKOUT SECTIONS ==================== */
-        .workout-section {
-            background: #0a0a0a;
-        }
-
-        .section-title {
-            font-size: 40px;
-            font-weight: 900;
-            margin-bottom: 40px;
-            text-align: center;
-        }
-
-        .section-title span {
-            color: #ff6b00;
-        }
-
-        .exercise-container {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-            max-width: 1000px;
-            width: 100%;
-        }
-
-        .exercise-box {
-            background: #111;
-            border: 1px solid #222;
-            border-radius: 20px;
-            padding: 30px;
-            display: flex;
-            gap: 25px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .exercise-box:hover {
-            border-color: #ff6b00;
-        }
-
-        .exercise-img {
-            width: 250px;
-            height: 250px;
-            border-radius: 15px;
-            object-fit: cover;
-            border: 2px solid #222;
-            flex-shrink: 0;
-            background: #1a1a1a;
-        }
-
-        .exercise-content {
-            flex: 1;
-            min-width: 250px;
-        }
-
-        .exercise-name {
-            font-size: 28px;
-            font-weight: 900;
-            margin-bottom: 10px;
-        }
-
-        .sets {
-            display: inline-block;
-            background: #ff6b00;
-            color: #000;
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-weight: 900;
-            margin-bottom: 15px;
-        }
-
-        .how-to {
-            color: #aaa;
-            background: #1a1a1a;
-            padding: 15px;
-            border-radius: 10px;
-            border-left: 3px solid #ff6b00;
-            line-height: 1.6;
-        }
-
-        .back-top {
-            display: inline-block;
-            margin-top: 30px;
-            background: #ff6b00;
-            color: #000;
-            padding: 12px 30px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        @media (max-width: 900px) {
-            .grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .main-title {
-                font-size: 45px;
-            }
-            .exercise-box {
-                flex-direction: column;
-            }
-            .exercise-img {
-                width: 100%;
-                height: 200px;
-            }
-            .nav a {
-                margin: 5px;
-                padding: 8px 15px;
-                font-size: 14px;
-            }
-        }
-
-        @media (max-width: 500px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-            .main-title {
-                font-size: 32px;
-            }
-            .nav a {
-                padding: 6px 10px;
-                font-size: 12px;
-                margin: 2px;
-            }
-        }
-    </style>
+    @media (max-width: 600px) {
+      .exercise-box { flex-direction: column; }
+      .exercise-img { width: 100%; height: 200px; }
+      .nav a, .nav button { padding: 6px 10px; font-size: 0.8rem; }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- ==================== NAVIGATION BAR ==================== -->
-    <div class="nav">
-        <a href="#home" class="home-btn">🏠 HOME</a>
-        <a href="#day1">🔥 DAY 1</a>
-        <a href="#day2">⚡ DAY 2</a>
-        <a href="#day3">💪 DAY 3</a>
-        <a href="#day4">🎯 DAY 4</a>
+<div class="nav" id="navbar">
+  <a href="#home" class="home-btn">🏠 FITFORGE</a>
+  <a href="#day1">🔥 Day 1</a>
+  <a href="#day2">⚡ Day 2</a>
+  <a href="#day3">💪 Day 3</a>
+  <a href="#day4">🎯 Day 4</a>
+  <button onclick="toggleDarkMode()" title="Toggle light/dark"><i class="fas fa-moon"></i></button>
+  <span class="streak-badge" id="streakDisplay">🔥 0</span>
+  <button onclick="openTimer()" title="Rest Timer"><i class="fas fa-clock"></i></button>
+</div>
+
+<!-- Floating controls for mobile/quick actions -->
+<div class="floating-controls">
+  <button class="float-btn" onclick="openTimer()"><i class="fas fa-stopwatch"></i></button>
+  <button class="float-btn" onclick="shareWorkout()"><i class="fas fa-share-alt"></i></button>
+  <button class="float-btn" id="musicToggle"><i class="fas fa-music"></i></button>
+</div>
+
+<!-- Timer Modal -->
+<div class="overlay" id="timerOverlay" onclick="closeTimer()"></div>
+<div class="timer-modal" id="timerModal">
+  <span class="timer-close" onclick="closeTimer()">&times;</span>
+  <h3>Rest Timer</h3>
+  <div class="timer-display" id="timerDisplay">01:30</div>
+  <div class="timer-controls">
+    <button onclick="setTimer(60)">60s</button>
+    <button onclick="setTimer(90)">90s</button>
+    <button onclick="setTimer(120)">120s</button>
+    <button onclick="startTimer()">Start</button>
+    <button onclick="pauseTimer()">Pause</button>
+    <button onclick="resetTimer()">Reset</button>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="section" id="home">
+  <h1 class="main-title">FITFORGE</h1>
+  <p class="subtitle">BUILD YOUR LEGACY</p>
+  <div class="quote-box" id="quoteDisplay"></div>
+  <div class="grid">
+    <a href="#day1" class="card">
+      <span class="card-icon">🔥</span>
+      <span class="card-num">01</span>
+      <div class="card-label">CHEST DAY</div>
+      <div class="card-muscle">Chest & Triceps</div>
+    </a>
+    <a href="#day2" class="card">
+      <span class="card-icon">⚡</span>
+      <span class="card-num">02</span>
+      <div class="card-label">BACK DAY</div>
+      <div class="card-muscle">Back & Biceps</div>
+    </a>
+    <a href="#day3" class="card">
+      <span class="card-icon">💪</span>
+      <span class="card-num">03</span>
+      <div class="card-label">LEG DAY</div>
+      <div class="card-muscle">Legs & Core</div>
+    </a>
+    <a href="#day4" class="card">
+      <span class="card-icon">🎯</span>
+      <span class="card-num">04</span>
+      <div class="card-label">ARM DAY</div>
+      <div class="card-muscle">Shoulders & Arms</div>
+    </a>
+  </div>
+  <div class="water-tracker">
+    <span>💧 Water: </span>
+    <span class="water-glass" onclick="drinkWater()">🥛</span>
+    <span class="water-glass" onclick="drinkWater()">🥛</span>
+    <span class="water-glass" onclick="drinkWater()">🥛</span>
+    <span class="water-glass" onclick="drinkWater()">🥛</span>
+    <span class="water-glass" onclick="drinkWater()">🥛</span>
+    <span class="water-glass" onclick="drinkWater()">🥛</span>
+    <span id="waterCount">0/8</span>
+  </div>
+</div>
+
+<!-- DAY 1 -->
+<div class="section" id="day1">
+  <h2 class="section-title"><span>DAY 1</span> — CHEST & TRICEPS</h2>
+  <div class="warmup-section">
+    <button class="warmup-toggle" onclick="toggleWarmup('warmup1')">🔥 Warm-Up & Cool-Down</button>
+    <div class="warmup-content" id="warmup1">
+      <p><strong>Warm-Up (5 min):</strong> Jumping jacks, arm circles, light push-ups.</p>
+      <p><strong>Cool-Down:</strong> Chest stretch, tricep stretch, deep breathing.</p>
     </div>
+  </div>
+  <div class="exercise-container" id="day1-exercises">
+    <!-- Exercises injected by JS for interactivity -->
+  </div>
+  <button class="print-btn" onclick="window.print()">🖨 Print Workout</button>
+  <a href="#home" class="back-top">⬆ BACK TO HOME</a>
+</div>
 
-    <!-- ==================== HOME SECTION ==================== -->
-    <div class="section" id="home">
-        <h1 class="main-title">FITFORGE</h1>
-        <p class="subtitle">BUILD YOUR LEGACY</p>
-        
-        <div class="grid">
-            <a href="#day1" class="card">
-                <span class="card-icon">🔥</span>
-                <span class="card-num">01</span>
-                <div class="card-label">CHEST DAY</div>
-                <div class="card-muscle">Chest & Triceps</div>
-            </a>
-
-            <a href="#day2" class="card">
-                <span class="card-icon">⚡</span>
-                <span class="card-num">02</span>
-                <div class="card-label">BACK DAY</div>
-                <div class="card-muscle">Back & Biceps</div>
-            </a>
-
-            <a href="#day3" class="card">
-                <span class="card-icon">💪</span>
-                <span class="card-num">03</span>
-                <div class="card-label">LEG DAY</div>
-                <div class="card-muscle">Legs & Core</div>
-            </a>
-
-            <a href="#day4" class="card">
-                <span class="card-icon">🎯</span>
-                <span class="card-num">04</span>
-                <div class="card-label">ARM DAY</div>
-                <div class="card-muscle">Shoulders & Arms</div>
-            </a>
-        </div>
+<!-- DAY 2 -->
+<div class="section" id="day2">
+  <h2 class="section-title"><span>DAY 2</span> — BACK & BICEPS</h2>
+  <div class="warmup-section">
+    <button class="warmup-toggle" onclick="toggleWarmup('warmup2')">🔥 Warm-Up & Cool-Down</button>
+    <div class="warmup-content" id="warmup2">
+      <p><strong>Warm-Up:</strong> Arm swings, cat-cow, light rows with band.</p>
+      <p><strong>Cool-Down:</strong> Lat stretch, bicep stretch, child's pose.</p>
     </div>
+  </div>
+  <div class="exercise-container" id="day2-exercises"></div>
+  <button class="print-btn" onclick="window.print()">🖨 Print Workout</button>
+  <a href="#home" class="back-top">⬆ BACK TO HOME</a>
+</div>
 
-    <!-- ==================== DAY 1 SECTION ==================== -->
-    <div class="section workout-section" id="day1">
-        <h2 class="section-title"><span>DAY 1</span> — CHEST & TRICEPS</h2>
-        <div class="exercise-container">
-            <div class="exercise-box">
-                <img src="https://images.pexels.com/photos/4164517/pexels-photo-4164517.jpeg?auto=compress&cs=tinysrgb&w=600" 
-                     alt="Bench Press" class="exercise-img"
-                     onerror="this.src='https://via.placeholder.com/250x250/1a1a1a/ff6b00?text=Bench+Press'">
-                <div class="exercise-content">
-                    <h3 class="exercise-name">Barbell Bench Press</h3>
-                    <div class="sets">4 SETS × 8-10 REPS</div>
-                    <div class="how-to">
-                        📸 <strong>How to do it:</strong> Lie flat on the bench, feet on floor. Grip barbell wider than shoulder-width. Lower bar to mid-chest, press up explosively. Keep shoulder blades squeezed.
-                    </div>
-                </div>
-            </div>
-
-            <div class="exercise-box">
-                <img src="https://images.pexels.com/photos/4164762/pexels-photo-4164762.jpeg?auto=compress&cs=tinysrgb&w=600" 
-                     alt="Incline Press" class="exercise-img"
-                     onerror="this.src='https://via.placeholder.com/250x250/1a1a1a/ff6b00?text=Incline+Press'">
-                <div class="exercise-content">
-                    <h3 class="exercise-name">Incline Dumbbell Press</h3>
-                    <div class="sets">3 SETS × 10-12 REPS</div>
-                    <div class="how-to">
-                        📸 <strong>How to do it:</strong> Set bench to 30-45° incline. Hold dumbbells at chest level. Press up until arms extended. Squeeze upper chest at top, lower slowly.
-                    </div>
-                </div>
-            </div>
-
-            <div class="exercise-box">
-                <img src="https://images.pexels.com/photos/4164515/pexels-photo-4164515.jpeg?auto=compress&cs=tinysrgb&w=600" 
-                     alt="Tricep Dips" class="exercise-img"
-                     onerror="this.src='https://via.placeholder.com/250x250/1a1a1a/ff6b00?text=Tricep+Dips'">
-                <div class="exercise-content">
-                    <h3 class="exercise-name">Tricep Dips</h3>
-                    <div class="sets">3 SETS × 12-15 REPS</div>
-                    <div class="how-to">
-                        📸 <strong>How to do it:</strong> Use parallel bars or bench edge. Lower body until elbows at 90°. Push back up without locking elbows. Keep body close to bars.
-                    </div>
-                </div>
-            </div>
-        </div>
-        <a href="#home" class="back-top">⬆ BACK TO HOME</a>
+<!-- DAY 3 -->
+<div class="section" id="day3">
+  <h2 class="section-title"><span>DAY 3</span> — LEGS & CORE</h2>
+  <div class="warmup-section">
+    <button class="warmup-toggle" onclick="toggleWarmup('warmup3')">🔥 Warm-Up & Cool-Down</button>
+    <div class="warmup-content" id="warmup3">
+      <p><strong>Warm-Up:</strong> Leg swings, bodyweight squats, lunges.</p>
+      <p><strong>Cool-Down:</strong> Quad stretch, hamstring stretch, pigeon pose.</p>
     </div>
+  </div>
+  <div class="exercise-container" id="day3-exercises"></div>
+  <button class="print-btn" onclick="window.print()">🖨 Print Workout</button>
+  <a href="#home" class="back-top">⬆ BACK TO HOME</a>
+</div>
 
-    <!-- ==================== DAY 2 SECTION ==================== -->
-    <div class="section workout-section" id="day2">
-        <h2 class="section-title"><span>DAY 2</span> — BACK & BICEPS</h2>
-        <div class="exercise-container">
-            <div class="exercise-box">
-                <img src="https://images.pexels.com/photos/4164518/pexels-photo-4164518.jpeg?auto=compress&cs=tinysrgb&w=600" 
-                     alt="Pull Ups" class="exercise-img"
-                     onerror="this.src='https://via.placeholder.com/250x250/1a1a1a/ff6b00?text=Pull+Ups'">
-                <div class="exercise-content">
-                    <h3 class="exercise-name">Pull-Ups</h3>
-                    <div class="sets">4 SETS × 6-10 REPS</div>
-                    <div class="how-to">
-                        📸 <strong>How to do it:</strong> Grip bar with palms facing away, hands shoulder-width. Pull up until chin clears bar. Lower with control. Engage lats throughout.
-                    </div>
-                </div>
-            </div>
-
-            <div class="exercise-box">
-                <img src="https://images.pexels.com/photos/4164765/pexels-photo-4164765.jpeg?auto=compress&cs=tinysrgb&w=600" 
-                     alt="Barbell Row" class="exercise-img"
-                     onerror="this.src='https://via.placeholder.com/250x250/1a1a1a/ff6b00?text=Barbell+Row'">
-                <div class="exercise-content">
-                    <h3 class="exercise-name">Barbell Row</h3>
-                    <div class="sets">4 SETS × 8-10 REPS</div>
-                    <div class="how-to">
-                        📸 <strong>How to do it:</strong> Hinge at hips with straight back. Pull barbell to lower chest. Squeeze shoulder blades together. Lower weight with control.
-                    </div>
-                </div>
-            </div>
-
-            <div class="exercise-box">
-                <img src="https://images.pexels.com/photos/4164519/pexels-photo-4164519.jpeg?auto=compress&cs=tinysrgb&w=600" 
-                     alt="Dumbbell Curl" class="exercise-img"
-                     onerror="this.src='https://via.placeholder.com/250x250/1a1a1a/ff6b00?text=Dumbbell+Curl'">
-                <div class="exercise-content">
-                    <h3 class="exercise-name">Dumbbell Bicep Curl</h3>
-                    <div class="sets">3 SETS × 10-12 REPS</div>
-                    <div class="how-to">
-                        📸 <strong>How to do it:</strong> Stand with dumbbells at sides, palms forward. Curl weights up keeping elbows fixed. Squeeze biceps at top, lower slowly.
-                    </div>
-                </div>
-            </div>
-        </div>
-        <a href="#home" class="back-top">⬆ BACK TO HOME</a>
+<!-- DAY 4 -->
+<div class="section" id="day4">
+  <h2 class="section-title"><span>DAY 4</span> — SHOULDERS & ARMS</h2>
+  <div class="warmup-section">
+    <button class="warmup-toggle" onclick="toggleWarmup('warmup4')">🔥 Warm-Up & Cool-Down</button>
+    <div class="warmup-content" id="warmup4">
+      <p><strong>Warm-Up:</strong> Shoulder rolls, band pull-aparts, light presses.</p>
+      <p><strong>Cool-Down:</strong> Shoulder stretch, tricep stretch, wrist flexor stretch.</p>
     </div>
+  </div>
+  <div class="exercise-container" id="day4-exercises"></div>
+  <button class="print-btn" onclick="window.print()">🖨 Print Workout</button>
+  <a href="#home" class="back-top">⬆ BACK TO HOME</a>
+</div>
 
-    <!-- ==================== DAY 3 SECTION ==================== -->
-    <div class="section workout-section" id="day3">
-        <h2 class="section-title"><span>DAY 3</span> — LEGS & CORE</h2>
-        <div class="exercise-container">
-            <div class="exercise-box">
-                <img src="https://images.pexels.com/photos/4164768/pexels-photo-4164768.jpeg?auto=compress&cs=tinysrgb&w=600" 
-                     alt="Barbell Squat" class="exercise-img"
-                     onerror="this.src='https://via.placeholder.com/250x250/1a1a1a/ff6b00?text=Barbell+Squat'">
-                <div class="exercise-content">
-                    <h3 class="exercise-name">Barbell Squat</h3>
-                    <div class="sets">4 SETS × 8-10 REPS</div>
-                    <div class="how-to">
-                        📸 <strong>How to do it:</strong> Place barbell across upper back. Feet shoulder-width apart. Squat until thighs parallel to floor. Drive through heels to stand up.
-                    </div>
-                </div>
-            </div>
+<!-- Hidden audio element for lofi music -->
+<audio id="bgMusic" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
 
-            <div class="exercise-box">
-                <img src="https://images.pexels.com/photos/4164770/pexels-photo-4164770.jpeg?auto=compress&cs=tinysrgb&w=600" 
-                     alt="Walking Lunges" class="exercise-img"
-                     onerror="this.src='https://via.placeholder.com/250x250/1a1a1a/ff6b00?text=Walking+Lunges'">
-                <div class="exercise-content">
-                    <h3 class="exercise-name">Walking Lunges</h3>
-                    <div class="sets">3 SETS × 12 PER LEG</div>
-                    <div class="how-to">
-                        📸 <strong>How to do it:</strong> Step forward, lower hips until both knees at 90°. Keep front knee aligned with ankle. Push through front heel to next lunge.
-                    </div>
-                </div>
-            </div>
+<script>
+// ==================== FEATURE IMPLEMENTATION ====================
 
-            <div class="exercise-box">
-                <img src="https://images.pexels.com/photos/4164771/pexels-photo-4164771.jpeg?auto=compress&cs=tinysrgb&w=600" 
-                     alt="Plank" class="exercise-img"
-                     onerror="this.src='https://via.placeholder.com/250x250/1a1a1a/ff6b00?text=Plank'">
-                <div class="exercise-content">
-                    <h3 class="exercise-name">Forearm Plank</h3>
-                    <div class="sets">3 SETS × 45-60 SECONDS</div>
-                    <div class="how-to">
-                        📸 <strong>How to do it:</strong> Forearms on ground, elbows under shoulders. Body in straight line. Brace core, squeeze glutes, breathe steadily.
-                    </div>
-                </div>
-            </div>
-        </div>
-        <a href="#home" class="back-top">⬆ BACK TO HOME</a>
-    </div>
+// --- DATA STRUCTURE ---
+const exercisesData = {
+  day1: [
+    {
+      name: "Barbell Bench Press",
+      sets: 4, reps: "8-10",
+      image: "https://images.pexels.com/photos/4164517/pexels-photo-4164517.jpeg?auto=compress&cs=tinysrgb&w=600",
+      howto: "Lie flat on bench, grip bar wider than shoulder-width. Lower to mid-chest, press up explosively.",
+      substitute: "Alternative: Dumbbell Bench Press or Push-Ups"
+    },
+    {
+      name: "Incline Dumbbell Press",
+      sets: 3, reps: "10-12",
+      image: "https://images.pexels.com/photos/4164762/pexels-photo-4164762.jpeg?auto=compress&cs=tinysrgb&w=600",
+      howto: "Set bench to 30-45°. Press dumbbells from chest level. Squeeze upper chest at top.",
+      substitute: "Alternative: Incline Barbell Press or Machine Press"
+    },
+    {
+      name: "Tricep Dips",
+      sets: 3, reps: "12-15",
+      image: "https://images.pexels.com/photos/4164515/pexels-photo-4164515.jpeg?auto=compress&cs=tinysrgb&w=600",
+      howto: "Use parallel bars or bench. Lower until elbows 90°, push up without locking.",
+      substitute: "Alternative: Close-Grip Bench Press or Overhead Tricep Extension"
+    }
+  ],
+  day2: [
+    {
+      name: "Pull-Ups", sets: 4, reps: "6-10",
+      image: "https://images.pexels.com/photos/4164518/pexels-photo-4164518.jpeg?auto=compress&cs=tinysrgb&w=600",
+      howto: "Overhand grip, pull chin above bar. Control descent.",
+      substitute: "Alternative: Lat Pulldown or Band-Assisted Pull-Ups"
+    },
+    {
+      name: "Barbell Row", sets: 4, reps: "8-10",
+      image: "https://images.pexels.com/photos/4164765/pexels-photo-4164765.jpeg?auto=compress&cs=tinysrgb&w=600",
+      howto: "Hinge at hips, back straight. Pull bar to lower chest, squeeze shoulder blades.",
+      substitute: "Alternative: Dumbbell Rows or Cable Rows"
+    },
+    {
+      name: "Dumbbell Bicep Curl", sets: 3, reps: "10-12",
+      image: "https://images.pexels.com/photos/4164519/pexels-photo-4164519.jpeg?auto=compress&cs=tinysrgb&w=600",
+      howto: "Stand with dumbbells, curl up keeping elbows fixed. Squeeze at top.",
+      substitute: "Alternative: Barbell Curl or Hammer Curl"
+    }
+  ],
+  day3: [
+    {
+      name: "Barbell Squat", sets: 4, reps: "8-10",
+      image: "https://images.pexels.com/photos/4164768/pexels-photo-4164768.jpeg?auto=compress&cs=tinysrgb&w=600",
+      howto: "Bar on upper back, squat to parallel. Drive through heels.",
+      substitute: "Alternative: Goblet Squats or Leg Press"
+    },
+    {
+      name: "Walking Lunges", sets: 3, reps: "12 per leg",
+      image: "https://images.pexels.com/photos/4164770/pexels-photo-4164770.jpeg?auto=compress&cs=tinysrgb&w=600",
+      howto: "Step forward, lower back knee. Keep front knee over ankle.",
+      substitute: "Alternative: Stationary Lunges or Step-Ups"
+    },
+    {
+      name: "Forearm Plank", sets: 3, reps: "45-60 sec",
+      image: "https://images.pexels.com/photos/4164771/pexels-photo-4164771.jpeg?auto=compress&cs=tinysrgb&w=600",
+      howto: "Forearms on ground, body straight. Brace core, breathe.",
+      substitute: "Alternative: Side Plank or Dead Bug"
+    }
+  ],
+  day4: [
+    {
+      name: "Overhead Press", sets: 4, reps: "8-10",
+      image: "https://images.pexels.com/photos/4164772/pexels-photo-4164772.jpeg?auto=compress&cs=tinysrgb&w=600",
+      howto: "Press barbell from shoulders overhead. Lock arms, core tight.",
+      substitute: "Alternative: Dumbbell Press or Arnold Press"
+    },
+    {
+      name: "Lateral Raises", sets: 3, reps: "12-15",
+      image: "https://images.pexels.com/photos/4164773/pexels-photo-4164773.jpeg?auto=compress&cs=tinysrgb&w=600",
+      howto: "Raise dumbbells to sides until parallel. Slight bend in elbows.",
+      substitute: "Alternative: Cable Lateral Raises or Upright Rows"
+    },
+    {
+      name: "Skull Crushers", sets: 3, reps: "10-12",
+      image: "https://images.pexels.com/photos/4164774/pexels-photo-4164774.jpeg?auto=compress&cs=tinysrgb&w=600",
+      howto: "Lie on bench, lower EZ-bar to forehead. Extend arms.",
+      substitute: "Alternative: Overhead Tricep Extension or Kickbacks"
+    }
+  ]
+};
 
-    <!-- ==================== DAY 4 SECTION ==================== -->
-    <div class="section workout-section" id="day4">
-        <h2 class="section-title"><span>DAY 4</span> — SHOULDERS & ARMS</h2>
-        <div class="exercise-container">
-            <div class="exercise-box">
-                <img src="https://images.pexels.com/photos/4164772/pexels-photo-4164772.jpeg?auto=compress&cs=tinysrgb&w=600" 
-                     alt="Overhead Press" class="exercise-img"
-                     onerror="this.src='https://via.placeholder.com/250x250/1a1a1a/ff6b00?text=Overhead+Press'">
-                <div class="exercise-content">
-                    <h3 class="exercise-name">Overhead Shoulder Press</h3>
-                    <div class="sets">4 SETS × 8-10 REPS</div>
-                    <div class="how-to">
-                        📸 <strong>How to do it:</strong> Hold barbell at shoulder level. Press overhead until arms extended. Lower back with control. Keep core tight.
-                    </div>
-                </div>
-            </div>
+// --- LOCAL STORAGE KEYS ---
+const STORAGE_PR = 'fitforge_pr';
+const STORAGE_STREAK = 'fitforge_streak';
+const STORAGE_LASTDATE = 'fitforge_lastdate';
+const STORAGE_DARK = 'fitforge_dark';
+const STORAGE_WATER = 'fitforge_water';
 
-            <div class="exercise-box">
-                <img src="https://images.pexels.com/photos/4164773/pexels-photo-4164773.jpeg?auto=compress&cs=tinysrgb&w=600" 
-                     alt="Lateral Raises" class="exercise-img"
-                     onerror="this.src='https://via.placeholder.com/250x250/1a1a1a/ff6b00?text=Lateral+Raises'">
-                <div class="exercise-content">
-                    <h3 class="exercise-name">Lateral Raises</h3>
-                    <div class="sets">3 SETS × 12-15 REPS</div>
-                    <div class="how-to">
-                        📸 <strong>How to do it:</strong> Hold dumbbells at sides, slight bend in elbows. Raise arms to sides until parallel to floor. Pause, then lower slowly.
-                    </div>
-                </div>
-            </div>
+// --- INITIALIZATION ---
+document.addEventListener('DOMContentLoaded', () => {
+  renderAllExercises();
+  loadCheckboxState();
+  loadPRs();
+  updateStreak();
+  updateQuote();
+  applyDarkMode();
+  loadWater();
+  updateWaterDisplay();
+  setupMusic();
+});
 
-            <div class="exercise-box">
-                <img src="https://images.pexels.com/photos/4164774/pexels-photo-4164774.jpeg?auto=compress&cs=tinysrgb&w=600" 
-                     alt="Skull Crushers" class="exercise-img"
-                     onerror="this.src='https://via.placeholder.com/250x250/1a1a1a/ff6b00?text=Skull+Crushers'">
-                <div class="exercise-content">
-                    <h3 class="exercise-name">Skull Crushers</h3>
-                    <div class="sets">3 SETS × 10-12 REPS</div>
-                    <div class="how-to">
-                        📸 <strong>How to do it:</strong> Lie on bench, hold EZ-bar above chest. Lower weight toward forehead. Extend arms back up. Keep elbows pointed to ceiling.
-                    </div>
-                </div>
-            </div>
-        </div>
-        <a href="#home" class="back-top">⬆ BACK TO HOME</a>
-    </div>
-
-</body>
-                  </html>
+// --- RENDER EXERCISES ---
+function renderAllExercises() {
+  for (let day in exercisesData) {
+    const container = document.getElementById(day + '-exercises');
+    if (!container) continue;
+    container.innerHTML = exercisesData[day].map((ex, idx) => `
+      <div class="exercise-box" data-day="${day}" data-index="${idx}">
+        <img src="${ex.image}" alt="${ex.name}" class="exercise-img"
+             onerror="this.src='https://via.placeholder.com/220/1a1a1a/ff6b00?text=${encodeURIComponent(ex.name)}'">
+        <div class="exercise-content">
+          <h3 class="exercise-name">${ex.name}</h3>
+          <div class="sets-badge">${ex.sets} SETS × ${ex.reps}</div>
+          <div class="how-to">📸 <strong>How to:</strong> ${ex.howto}</div>
+          <div class="exercise-actions">
+      
