@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitForge | 7-Day Workout</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      scroll-behavior: smooth;
+    }
+    .nav {
+      position: fixed; top: 0; width: 100%; background: #111;
+      padding: 12px; z-index: 100;
+      display: flex; justify-content: center; flex-wrap: wrap; gap: 8px;
+      border-bottom: 1px solid #333;
+    }
+    .nav a {
+      color: #fff; text-decoration: none; font-weight: bold;
+      padding: 8px 16px; border-radius: 20px; background: #222;
+    }
+    .nav a:hover { background: #ff6b00; color: #000; }
+    .section {
+      min-height: 100vh; padding: 100px 20px 40px;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    #home { justify-content: center; text-align: center; }
+    h1 {
+      font-size: 3rem; font-weight: 900;
+      background: linear-gradient(45deg, #ff6b00, #ff9100);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 2rem;
+    }
+    .grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 15px; max-width: 800px; width: 100%;
+    }
+    .card {
+      background: #111; border: 1px solid #333; border-radius: 20px;
+      padding: 25px 10px; text-align: center; color: #fff;
+      text-decoration: none; transition: 0.3s;
+    }
+    .card:hover { border-color: #ff6b00; transform: translateY(-5px); }
+    .card-icon { font-size: 2.5rem; }
+    .card-num { font-size: 2rem; font-weight: 900; color: #ff6b00; }
+    .card-label { font-weight: bold; letter-spacing: 1px; }
+    h2 { font-size: 2.2rem; margin-bottom: 25px; color: #ff6b00; }
+    .exercise-list {
+      display: flex; flex-direction: column; gap: 20px;
+      max-width: 800px; width: 100%;
+    }
+    .exercise-item {
+      background: #111; border: 1px solid #333; border-radius: 15px;
+      padding: 20px; display: flex; gap: 20px; align-items: center;
+      flex-wrap: wrap;
+    }
+    .exercise-icon {
+      font-size: 4rem; min-width: 80px; text-align: center;
+    }
+    .exercise-info { flex: 1; min-width: 200px; }
+    .exercise-info h3 { font-size: 1.5rem; margin-bottom: 8px; }
+    .sets { color: #ff6b00; font-weight: bold; margin-bottom: 8px; }
+    .instruction { color: #aaa; line-height: 1.5; }
+    .back-btn {
+      display: inline-block; margin-top: 25px; padding: 10px 25px;
+      background: #ff6b00; color: #000; border-radius: 25px;
+      text-decoration: none; font-weight: bold;
+    }
+    @media (max-width: 600px) {
+      .exercise-item { flex-direction: column; text-align: center; }
+      .exercise-icon { font-size: 3rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <a href="#home">🏠 Home</a>
+    <a href="#day1">Day 1</a>
+    <a href="#day2">Day 2</a>
+    <a href="#day3">Day 3</a>
+    <a href="#day4">Day 4</a>
+    <a href="#day5">Day 5</a>
+    <a href="#day6">Day 6</a>
+    <a href="#day7">Day 7</a>
+  </nav>
+
+  <!-- Home Section -->
+  <section id="home" class="section">
+    <h1>FITFORGE</h1>
+    <div class="grid">
+      <a href="#day1" class="card">
+        <div class="card-icon">🔥</div>
+        <div class="card-num">1</div>
+        <div class="card-label">CHEST</div>
+      </a>
+      <a href="#day2" class="card">
+        <div class="card-icon">⚡</div>
+        <div class="card-num">2</div>
+        <div class="card-label">BACK</div>
+      </a>
+      <a href="#day3" class="card">
+        <div class="card-icon">💪</div>
+        <div class="card-num">3</div>
+        <div class="card-label">LEGS</div>
+      </a>
+      <a href="#day4" class="card">
+        <div class="card-icon">🦅</div>
+        <div class="card-num">4</div>
+        <div class="card-label">SHOULDERS</div>
+      </a>
+      <a href="#day5" class="card">
+        <div class="card-icon">💪</div>
+        <div class="card-num">5</div>
+        <div class="card-label">ARMS</div>
+      </a>
+      <a href="#day6" class="card">
+        <div class="card-icon">🧘</div>
+        <div class="card-num">6</div>
+        <div class="card-label">CORE</div>
+      </a>
+      <a href="#day7" class="card">
+        <div class="card-icon">🏋️</div>
+        <div class="card-num">7</div>
+        <div class="card-label">FULL BODY</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Day 1 -->
+  <section id="day1" class="section">
+    <h2>DAY 1 — CHEST & TRICEPS</h2>
+    <div class="exercise-list">
+      <div class="exercise-item">
+        <div class="exercise-icon">🏋️</div>
+        <div class="exercise-info">
+          <h3>Bench Press</h3>
+          <div class="sets">4 SETS × 8-10 REPS</div>
+          <p class="instruction">Lie flat, grip bar wider than shoulders, lower to chest, press up.</p>
+        </div>
+      </div>
+      <div class="exercise-item">
+        <div class="exercise-icon">📐</div>
+        <div class="exercise-info">
+          <h3>Incline Dumbbell Press</h3>
+          <div class="sets">3 SETS × 10-12 REPS</div>
+          <p class="instruction">Bench at 30-45°, press dumbbells from chest, squeeze upper chest.</p>
+        </div>
+      </div>
+      <div class="exercise-item">
+        <div class="exercise-icon">⬇️</div>
+        <div class="exercise-info">
+          <h3>Tricep Dips</h3>
+          <div class="sets">3 SETS × 12-15 REPS</div>
+          <p class="instruction">Use parallel bars, lower until elbows 90°, push back up.</p>
+        </div>
+      </div>
+    </div>
+    <a href="#home" class="back-btn">⬆ Back to Home</a>
+  </section>
+
+  <!-- Day 2 -->
+  <section id="day2" class="section">
+    <h2>DAY 2 — BACK & BICEPS</h2>
+    <div class="exercise-list">
+      <div class="exercise-item">
+        <div class="exercise-icon">⬆️</div>
+        <div class="exercise-info">
+          <h3>Pull-Ups</h3>
+          <div class="sets">4 SETS × 6-10 REPS</div>
+          <p class="instruction">Overhand grip, pull chin above bar, lower with control.</p>
+        </div>
+      </div>
+      <div class="exercise-item">
+        <div class="exercise-icon">🚣</div>
+        <div class="exercise-info">
+          <h3>Barbell Row</h3>
+          <div class="sets">4 SETS × 8-10 REPS</div>
+          <p class="instruction">Bend at hips, back straight, pull bar to lower chest.</p>
+        </div>
+      </div>
+      <div class="exercise-item">
+        <div class="exercise-icon">💪</div>
+        <div class="exercise-info">
+          <h3>Dumbbell Curl</h3>
+          <div class="sets">3 SETS × 10-12 REPS</div>
+          <p class="instruction">Stand, curl dumbbells up, keep elbows fixed at sides.</p>
+        </div>
+      </div>
+    </div>
+    <a href="#home" class="back-btn">⬆ Back to Home</a>
+  </section>
+
+  <!-- Day 3 -->
+  <section id="day3" class="section">
+    <h2>DAY 3 — LEGS</h2>
+    <div class="exercise-list">
+      <div class="exercise-item">
+        <div class="exercise-icon">🦵</div>
+        <div class="exercise-info">
+          <h3>Barbell Squat</h3>
+          <div class="sets">4 SETS × 8-10 REPS</div>
+          <p class="instruction">Bar on upper back, squat until thighs parallel, drive up through heels.</p>
+        </div>
+      </div>
+      <div class="exercise-item">
+        <div class="exercise-icon">🏋️</div>
+        <div class="exercise-info">
+          <h3>Romanian Deadlift</h3>
+          <div class="sets">3 SETS × 10-12 REPS</div>
+          <p class="instruction">Hinge at hips, slight knee bend, lower bar along legs.</p>
+        </div>
+      </div>
+      <div class="exercise-item">
+        <div class="exercise-icon">🚶</div>
+        <div class="exercise-info">
+          <h3>Walking Lunges</h3>
+          <div class="sets">3 SETS × 12 per leg</div>
+          <p class="instruction">Step forward, lower back knee, keep front knee over ankle.</p>
+        </div>
+      </div>
+    </div>
+    <a href="#home" class="back-btn">⬆ Back to Home</a>
+  </section>
+
+  <!-- Day 4 -->
+  <section id="day4" class="section">
+    <h2>DAY 4 — SHOULDERS</h2>
+    <div class="exercise-list">
+      <div class="exercise-item">
+        <div class="exercise-icon">🏋️</div>
+        <div class="exercise-info">
+          <h3>Overhead Press</h3>
+          <div class="sets">4 SETS × 8-10 REPS</div>
+          <p class="instruction">Press barbell from shoulders overhead, keep core tight.</p>
+        </div>
+      </div>
+      <div class="exercise-item">
+        <div class="exercise-icon">🕊️</div>
+        <div class="exercise-info">
+          <h3>Lateral Raises</h3>
+          <div class="sets">3 SETS × 12-15 REPS</div>
+          <p class="instruction">Raise dumbbells to sides until parallel, slight bend in elbows.</p>
+        </div>
+      </div>
+      <div class="exercise-item">
+        <div class="exercise-icon">🎯</div>
+        <div class="exercise-info">
+          <h3>Face Pulls</h3>
+          <div class="sets">3 SETS × 15-20 REPS</div>
+          <p class="instruction">Pull rope towards face, squeeze shoulder blades.</p>
+        </div>
+      </div>
+    </div>
+    <a href="#home" class="back-btn">⬆ Back to Home</a>
+  </section>
+
+  <!-- Day 5 -->
+  <section id="day5" class="section">
+    <h2>DAY 5 — ARMS</h2>
+    <div class="exercise-list">
+      <div class="exercise-item">
+        <div class="exercise-icon">💪</div>
+        <div class="exercise-info">
+          <h3>Barbell Curl</h3>
+          <div class="sets">4 SETS × 8-10 REPS</div>
+          <p class="instruction">Curl barbell up, keep elbows stationary, squeeze at top.</p>
+        </div>
+      </div>
+      <div class="exercise-item">
+        <div class="exercise-icon">💀</div>
+        <div class="exercise-info">
+          <h3>Skull Crushers</h3>
+          <div class="sets">3 SETS × 10-12 REPS</div>
+          <p class="instruction">Lower EZ-bar to forehead, extend arms, elbows pointed up.</p>
+        </div>
+      </div>
+      <div class="exercise-item">
+        <div class="exercise-icon">🔨</div>
+        <div class="exercise-info">
+          <h3>Hammer Curl</h3>
+          <div class="sets">3 SETS × 12-15 REPS</div>
+          <p class="instruction">Neutral grip, curl dumbbells together, squeeze biceps.</p>
+        </div>
+      </div>
+    </div>
+    <a href="#home" class="back-btn">⬆ Back to Home</a>
+  </section>
+
+  <!-- Day 6 -->
+  <section id="day6" class="section">
+    <h2>DAY 6 — CORE & CARDIO</h2>
+    <div class="exercise-list">
+      <div class="exercise-item">
+        <div class="exercise-icon">🧘</div>
+        <div class="exercise-info">
+          <h3>Plank</h3>
+          <div class="sets">3 SETS × 45-60 sec</div>
+          <p class="instruction">Forearms on ground, body straight, brace core, breathe.</p>
+        </div>
+      </div>
+      <div class="exercise-item">
+        <div class="exercise-icon">🌀</div>
+        <div class="exercise-info">
+          <h3>Russian Twists</h3>
+          <div class="sets">3 SETS × 20 per side</div>
+          <p class="instruction">Sit balanced, twist torso side to side with weight.</p>
+        </div>
+      </div>
+      <div class="exercise-item">
+        <div class="exercise-icon">🏃</div>
+        <div class="exercise-info">
+          <h3>Burpees</h3>
+          <div class="sets">3 SETS × 12-15</div>
+          <p class="instruction">Squat, jump back to plank, jump up explosively.</p>
+        </div>
+      </div>
+    </div>
+    <a href="#home" class="back-btn">⬆ Back to Home</a>
+  </section>
+
+  <!-- Day 7 -->
+  <section id="day7" class="section">
+    <h2>DAY 7 — FULL BODY</h2>
+    <div class="exercise-list">
+      <div class="exercise-item">
+        <div class="exercise-icon">🏋️</div>
+        <div class="exercise-info">
+          <h3>Deadlift</h3>
+          <div class="sets">4 SETS × 6-8 REPS</div>
+          <p class="instruction">Hip hinge, lift bar from floor, lock out hips and knees.</p>
+        </div>
+      </div>
+      <div class="exercise-item">
+        <div class="exercise-icon">📤</div>
+        <div class="exercise-info">
+          <h3>Push Press</h3>
+          <div class="sets">3 SETS × 8-10 REPS</div>
+          <p class="instruction">Dip knees slightly, drive bar overhead in one motion.</p>
+        </div>
+      </div>
+      <div class="exercise-item">
+        <div class="exercise-icon">🔔</div>
+        <div class="exercise-info">
+          <h3>Kettlebell Swing</h3>
+          <div class="sets">3 SETS × 15-20 REPS</div>
+          <p class="instruction">Hinge at hips, swing kettlebell to chest height.</p>
+        </div>
+      </div>
+    </div>
+    <a href="#home" class="back-btn">⬆ Back to Home</a>
+  </section>
+</body>
+</html>
