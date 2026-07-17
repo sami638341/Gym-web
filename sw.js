@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fitforge-v2'; // <-- changed version
+const CACHE_NAME = 'fitforge-v2';
 const urlsToCache = [
   '.',
   'index.html',
