@@ -1,26 +1,11 @@
-const CACHE_NAME = 'fitforge-v3'; // new version
-
+const CACHE_NAME = 'fitforge-v3';
 self.addEventListener('install', event => {
-  self.skipWaiting(); // activate immediately
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(['.', 'index.html', 'manifest.json']);
-    })
-  );
+  self.skipWaiting();
+  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(['.', 'index.html', 'manifest.json'])));
 });
-
 self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys().then(keys => {
-      return Promise.all(
-        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
-      );
-    }).then(() => self.clients.claim()) // take control of all pages
-  );
+  event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))).then(() => self.clients.claim()));
 });
-
 self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request).then(response => response || fetch(event.request))
-  );
+  event.respondWith(caches.match(event.request).then(r => r || fetch(event.request)));
 });
