@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>FitForge Pro | 7‑Day Smart Workout</title>
   <style>
-    /* ========== CORE RESET & THEME ========== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: system-ui, -apple-system, sans-serif;
@@ -13,21 +12,43 @@
       color: #fff;
       scroll-behavior: smooth;
       --orange: #ff6b00;
-      --orange-glow: #ff8c00;
       --glass-bg: rgba(20, 20, 30, 0.55);
       --glass-border: rgba(255, 140, 0, 0.25);
     }
-
-    /* ========== ANIMATED HERO BACKGROUND ========== */
+    .nav {
+      position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.92);
+      padding: 12px; z-index: 1000;
+      display: flex; justify-content: center; flex-wrap: wrap; gap: 8px;
+      border-bottom: 1px solid #333; backdrop-filter: blur(10px);
+    }
+    .nav a, .nav button {
+      color: #fff; text-decoration: none; font-weight: bold;
+      padding: 8px 16px; border-radius: 20px; background: #222;
+      border: none; cursor: pointer; font-size: 0.85rem;
+    }
+    .nav a:hover, .nav button:hover { background: var(--orange); color: #000; }
+    .streak-badge {
+      background: var(--orange); color: #000; padding: 4px 12px;
+      border-radius: 15px; font-weight: bold; display: inline-flex; align-items: center;
+    }
+    .bottom-nav {
+      display: none; position: fixed; bottom: 0; width: 100%;
+      background: rgba(10,10,15,0.95); backdrop-filter: blur(20px);
+      border-top: 1px solid #333; padding: 10px 0; z-index: 200;
+      justify-content: space-around;
+    }
+    .bottom-nav a {
+      color: #aaa; text-decoration: none; font-size: 0.8rem;
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+    }
+    .bottom-nav a.active { color: #ff6b00; }
     .hero-section {
-      position: relative;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      overflow: hidden;
       background: linear-gradient(45deg, #0a0a0f, #1a1020, #0a0a0f);
       background-size: 400% 400%;
       animation: gradientMove 12s ease infinite;
@@ -39,18 +60,13 @@
       100% { background-position: 0% 50%; }
     }
     .hero-title {
-      font-size: clamp(3.5rem, 10vw, 7rem);
+      font-size: clamp(3rem, 10vw, 6rem);
       font-weight: 900;
       background: linear-gradient(45deg, #ff6b00, #ff9100, #fff, #ff6b00);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       margin-bottom: 1rem;
-      animation: titleGlow 2s ease-in-out infinite alternate;
-    }
-    @keyframes titleGlow {
-      from { filter: drop-shadow(0 0 15px #ff6b00); }
-      to { filter: drop-shadow(0 0 30px #ff8c00); }
     }
     .today-badge {
       background: rgba(255,107,0,0.2);
@@ -74,54 +90,36 @@
       transition: 0.3s;
       display: inline-block;
       box-shadow: 0 0 30px rgba(255,107,0,0.5);
-      margin-top: 20px;
+      margin: 10px;
+      border: none;
+      cursor: pointer;
     }
-    .start-btn:hover { transform: scale(1.05); box-shadow: 0 0 50px #ff8c00; }
+    .start-btn:hover { transform: scale(1.05); }
     .hero-stats {
       display: flex; gap: 30px; margin-top: 40px; flex-wrap: wrap; justify-content: center;
     }
     .hero-stat {
+      background: var(--glass-bg); backdrop-filter: blur(10px);
+      padding: 15px 25px; border-radius: 20px; border: 1px solid var(--glass-border);
       text-align: center;
-      background: var(--glass-bg);
-      backdrop-filter: blur(10px);
-      padding: 15px 25px;
-      border-radius: 20px;
-      border: 1px solid var(--glass-border);
     }
     .hero-stat .num { font-size: 2rem; font-weight: 900; color: #ff6b00; }
     .hero-stat .label { font-size: 0.8rem; letter-spacing: 2px; }
-
-    /* ========== GLASS CARDS GRID ========== */
     .main-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 20px;
-      max-width: 1000px;
-      width: 100%;
-      margin: 40px auto;
+      gap: 20px; max-width: 1000px; width: 100%; margin: 40px auto;
     }
     .day-card {
-      background: var(--glass-bg);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--glass-border);
-      border-radius: 24px;
-      padding: 30px 10px;
-      text-align: center;
-      color: #fff;
-      text-decoration: none;
-      transition: 0.3s;
-      position: relative;
-      overflow: hidden;
+      background: var(--glass-bg); backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border); border-radius: 24px;
+      padding: 30px 10px; text-align: center; color: #fff;
+      text-decoration: none; transition: 0.3s; position: relative;
     }
     .day-card.today {
-      border-color: #ff6b00;
-      box-shadow: 0 0 35px rgba(255,107,0,0.4);
+      border-color: #ff6b00; box-shadow: 0 0 35px rgba(255,107,0,0.4);
     }
-    .day-card:hover {
-      transform: translateY(-8px);
-      border-color: #ff8c00;
-      box-shadow: 0 20px 40px rgba(255,107,0,0.3);
-    }
+    .day-card:hover { transform: translateY(-8px); border-color: #ff8c00; }
     .card-preview-img {
       width: 60px; height: 60px; border-radius: 12px; object-fit: cover;
       background: #1a1a2e; margin: 0 auto 10px;
@@ -134,43 +132,56 @@
       background: #ff6b00; color: #000; padding: 4px 10px;
       border-radius: 20px; font-size: 0.7rem; font-weight: bold;
     }
-
-    /* ========== PROGRESS DASHBOARD ========== */
     .dashboard {
       max-width: 1000px; width: 100%; margin: 40px auto;
       background: var(--glass-bg); backdrop-filter: blur(15px);
       border: 1px solid var(--glass-border); border-radius: 30px;
       padding: 30px; display: flex; flex-wrap: wrap; gap: 30px;
-      justify-content: space-around;
+      justify-content: space-around; align-items: center;
     }
-    .progress-ring {
-      width: 120px; height: 120px; position: relative;
-    }
+    .progress-ring { width: 120px; height: 120px; position: relative; }
     .ring-text {
       position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
       font-size: 1.8rem; font-weight: 900; color: #ff6b00;
     }
     .xp-bar { flex: 1; min-width: 200px; }
-    .xp-bar-fill {
+    .xp-fill {
       height: 10px; background: #ff6b00; border-radius: 10px;
       width: 0%; transition: width 0.4s;
     }
-    .badge-area { display: flex; gap: 10px; flex-wrap: wrap; }
-
-    /* ========== BOTTOM MOBILE NAV ========== */
-    .bottom-nav {
-      display: none; position: fixed; bottom: 0; width: 100%;
-      background: rgba(10,10,15,0.95); backdrop-filter: blur(20px);
-      border-top: 1px solid #333; padding: 10px 0; z-index: 200;
-      justify-content: space-around;
+    .badge-area { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+    .section {
+      min-height: 100vh; padding: 100px 20px 40px;
+      display: flex; flex-direction: column; align-items: center;
     }
-    .bottom-nav a {
-      color: #aaa; text-decoration: none; font-size: 0.8rem;
-      display: flex; flex-direction: column; align-items: center; gap: 4px;
+    h2 { font-size: 2.2rem; margin-bottom: 25px; color: var(--orange); }
+    .exercise-list { display: flex; flex-direction: column; gap: 20px; max-width: 800px; width: 100%; }
+    .exercise-item {
+      background: #111; border: 1px solid #222; border-radius: 15px;
+      padding: 20px; display: flex; gap: 20px; align-items: center; flex-wrap: wrap;
     }
-    .bottom-nav a.active { color: #ff6b00; }
-
-    /* ========== ONBOARDING MODAL ========== */
+    .exercise-img-box {
+      width: 80px; height: 80px; border-radius: 10px; overflow: hidden;
+      flex-shrink: 0; background: #222;
+    }
+    .exercise-img-box img { width: 100%; height: 100%; object-fit: cover; }
+    .fallback-emoji {
+      display: none; font-size: 2.5rem; text-align: center; line-height: 80px;
+    }
+    .exercise-img-box.error .fallback-emoji { display: block; }
+    .exercise-img-box.error img { display: none; }
+    .exercise-info { flex: 1; min-width: 200px; }
+    .exercise-info h3 { font-size: 1.5rem; margin-bottom: 8px; }
+    .sets { color: var(--orange); font-weight: bold; margin-bottom: 8px; }
+    .instruction { color: #aaa; line-height: 1.5; }
+    .xp-reward { color: #ffaa00; font-weight: bold; font-size: 0.9rem; margin-left: 10px; }
+    .back-btn {
+      display: inline-block; margin-top: 25px; padding: 10px 25px;
+      background: var(--orange); color: #000; border-radius: 25px;
+      text-decoration: none; font-weight: bold;
+    }
+    .check-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin: 10px 0; }
+    .set-check { accent-color: var(--orange); transform: scale(1.2); }
     .onboarding-modal {
       display: none; position: fixed; top:0; left:0; width:100%; height:100%;
       background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center;
@@ -179,11 +190,12 @@
       background: #1a1a2e; padding: 30px; border-radius: 30px;
       max-width: 400px; text-align: center; border: 1px solid #ff6b00;
     }
-
-    /* ========== RESPONSIVE ========== */
     @media (max-width: 768px) {
       .bottom-nav { display: flex; }
-      .desktop-nav { display: none; }
+      .nav.desktop-nav { display: none; }
+      .exercise-item { flex-direction: column; text-align: center; }
+      .exercise-img-box { width: 100%; height: 150px; }
+      .fallback-emoji { line-height: 150px; }
     }
     @media (min-width: 769px) {
       .bottom-nav { display: none; }
@@ -191,22 +203,14 @@
   </style>
 </head>
 <body>
-  <!-- DESKTOP NAVIGATION -->
-  <nav class="nav desktop-nav" style="position:fixed;top:0;width:100%;background:rgba(0,0,0,0.9);padding:12px;z-index:100;display:flex;justify-content:center;gap:8px;border-bottom:1px solid #333;">
-    <a href="#home" style="color:#fff;text-decoration:none;font-weight:bold;padding:8px 16px;border-radius:20px;background:#222;">🏠 Home</a>
-    <a href="#day1" style="color:#fff;text-decoration:none;font-weight:bold;padding:8px 16px;border-radius:20px;background:#222;">1</a>
-    <a href="#day2" style="color:#fff;text-decoration:none;font-weight:bold;padding:8px 16px;border-radius:20px;background:#222;">2</a>
-    <a href="#day3" style="color:#fff;text-decoration:none;font-weight:bold;padding:8px 16px;border-radius:20px;background:#222;">3</a>
-    <a href="#day4" style="color:#fff;text-decoration:none;font-weight:bold;padding:8px 16px;border-radius:20px;background:#222;">4</a>
-    <a href="#day5" style="color:#fff;text-decoration:none;font-weight:bold;padding:8px 16px;border-radius:20px;background:#222;">5</a>
-    <a href="#day6" style="color:#fff;text-decoration:none;font-weight:bold;padding:8px 16px;border-radius:20px;background:#222;">6</a>
-    <a href="#day7" style="color:#fff;text-decoration:none;font-weight:bold;padding:8px 16px;border-radius:20px;background:#222;">7</a>
-    <span class="streak-badge" id="streakDisplay" style="background:#ff6b00;color:#000;padding:4px 12px;border-radius:15px;font-weight:bold;">🔥 0</span>
+  <nav class="nav desktop-nav">
+    <a href="#home">🏠 Home</a>
+    <a href="#day1">1</a><a href="#day2">2</a><a href="#day3">3</a><a href="#day4">4</a><a href="#day5">5</a><a href="#day6">6</a><a href="#day7">7</a>
+    <span class="streak-badge" id="streakDisplay">🔥 0</span>
+    <button onclick="openTimer()">⏱️ Timer</button>
   </nav>
 
-  <!-- ==================== MAIN PAGE ==================== -->
   <div id="home">
-    <!-- HERO SECTION -->
     <div class="hero-section">
       <h1 class="hero-title">FITFORGE</h1>
       <div class="today-badge" id="todayMessage">Loading...</div>
@@ -218,12 +222,10 @@
       </div>
     </div>
 
-    <!-- WORKOUT GRID (anchor) -->
     <div id="workout-grid" style="padding: 40px 20px;">
       <div class="main-grid" id="dayGrid"></div>
     </div>
 
-    <!-- PROGRESS DASHBOARD -->
     <div class="dashboard">
       <div class="progress-ring">
         <svg width="120" height="120" viewBox="0 0 120 120">
@@ -235,22 +237,24 @@
       <div class="xp-bar">
         <h4>🔥 XP Progress</h4>
         <div style="background:#222;border-radius:10px;margin:10px 0;">
-          <div class="xp-bar-fill" id="xpFill"></div>
+          <div class="xp-fill" id="xpFill"></div>
         </div>
-        <small id="xpText">0 / 1000 XP to next level</small>
+        <small id="xpText">0 / 100 XP to next level</small>
         <div class="badge-area" id="badges"></div>
       </div>
-      <div>
-        <button class="start-btn" style="margin:10px;" onclick="shareProgress()">📤 Share Progress</button>
-      </div>
+      <button class="start-btn" onclick="shareWorkout()">📤 Share Progress</button>
     </div>
   </div>
 
-  <!-- ==================== EXERCISE PAGES (same as before) ==================== -->
-  <!-- Day 1 ... Day 7 sections unchanged, but I'll keep them below for completeness -->
-  <!-- ... (all exercise sections identical to previous working version) ... -->
+  <!-- Day Sections (content injected by JS) -->
+  <div class="section" id="day1"><h2>DAY 1 — CHEST & TRICEPS</h2><div class="exercise-list" id="day1-exercises"></div><a href="#home" class="back-btn">⬆ Back to Home</a></div>
+  <div class="section" id="day2"><h2>DAY 2 — BACK & BICEPS</h2><div class="exercise-list" id="day2-exercises"></div><a href="#home" class="back-btn">⬆ Back to Home</a></div>
+  <div class="section" id="day3"><h2>DAY 3 — LEGS</h2><div class="exercise-list" id="day3-exercises"></div><a href="#home" class="back-btn">⬆ Back to Home</a></div>
+  <div class="section" id="day4"><h2>DAY 4 — SHOULDERS</h2><div class="exercise-list" id="day4-exercises"></div><a href="#home" class="back-btn">⬆ Back to Home</a></div>
+  <div class="section" id="day5"><h2>DAY 5 — ARMS</h2><div class="exercise-list" id="day5-exercises"></div><a href="#home" class="back-btn">⬆ Back to Home</a></div>
+  <div class="section" id="day6"><h2>DAY 6 — CORE & CARDIO</h2><div class="exercise-list" id="day6-exercises"></div><a href="#home" class="back-btn">⬆ Back to Home</a></div>
+  <div class="section" id="day7"><h2>DAY 7 — FULL BODY</h2><div class="exercise-list" id="day7-exercises"></div><a href="#home" class="back-btn">⬆ Back to Home</a></div>
 
-  <!-- BOTTOM MOBILE NAV -->
   <div class="bottom-nav">
     <a href="#home">🏠<span>Home</span></a>
     <a href="#" id="todayNavLink">📅<span>Today</span></a>
@@ -258,7 +262,6 @@
     <a href="#" onclick="shareWorkout()">📤<span>Share</span></a>
   </div>
 
-  <!-- ONBOARDING MODAL -->
   <div class="onboarding-modal" id="onboardingModal">
     <div class="onboarding-content">
       <h2>Welcome to FitForge!</h2>
@@ -267,152 +270,65 @@
     </div>
   </div>
 
+  <!-- Timer Modal (hidden by default) -->
+  <div id="timerOverlay" onclick="closeTimer()" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1500;"></div>
+  <div id="timerModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#1a1a2e; border:2px solid #ff6b00; border-radius:15px; padding:25px; z-index:2000; text-align:center; min-width:260px; box-shadow:0 0 30px rgba(0,0,0,0.8); color:#fff;">
+    <button onclick="closeTimer()" style="position:absolute; top:5px; right:12px; cursor:pointer; font-size:1.3rem; background:none; border:none; color:#fff;">&times;</button>
+    <h3>Rest Timer</h3>
+    <div id="timerDisplay" style="font-size:3.5rem; font-weight:900; margin:15px 0;">01:30</div>
+    <div>
+      <button onclick="setTimer(60)" style="margin:4px; padding:8px 16px; border-radius:20px; border:none; cursor:pointer; font-weight:bold; background:#ff6b00; color:#000;">60s</button>
+      <button onclick="setTimer(90)" style="margin:4px; padding:8px 16px; border-radius:20px; border:none; cursor:pointer; font-weight:bold; background:#ff6b00; color:#000;">90s</button>
+      <button onclick="setTimer(120)" style="margin:4px; padding:8px 16px; border-radius:20px; border:none; cursor:pointer; font-weight:bold; background:#ff6b00; color:#000;">120s</button>
+      <button onclick="startTimer()" style="margin:4px; padding:8px 16px; border-radius:20px; border:none; cursor:pointer; font-weight:bold; background:#ff6b00; color:#000;">Start</button>
+      <button onclick="pauseTimer()" style="margin:4px; padding:8px 16px; border-radius:20px; border:none; cursor:pointer; font-weight:bold; background:#ff6b00; color:#000;">Pause</button>
+      <button onclick="resetTimer()" style="margin:4px; padding:8px 16px; border-radius:20px; border:none; cursor:pointer; font-weight:bold; background:#ff6b00; color:#000;">Reset</button>
+    </div>
+  </div>
+
   <script>
-    // ==================== ALL EXERCISE DATA (same as before) ====================
+    // ==================== DATA ====================
     const exercisesData = {
-      day1: [ /* ... 10 exercises with images */ ],
-      // ... days 2-7
-    };
-    // (Keep your existing exercisesData object exactly as before – I'll abbreviate here for brevity)
-    // Full data in final file.
-
-    // ==================== INITIALIZATION ====================
-    document.addEventListener('DOMContentLoaded', () => {
-      renderDayCards();
-      updateHeroStats();
-      updateDashboard();
-      checkOnboarding();
-      setupTodayHighlight();
-      loadXP();
-      // render exercises for all days (same as before)
-      for (let i=1; i<=7; i++) renderExercises('day'+i, 'day'+i+'-exercises');
-    });
-
-    // ==================== DAY CARDS WITH IMAGE PREVIEWS ====================
-    function renderDayCards() {
-      const grid = document.getElementById('dayGrid');
-      const labels = ['Chest & Triceps','Back & Biceps','Legs','Shoulders','Arms','Core & Cardio','Full Body'];
-      const icons = ['🔥','⚡','💪','🦅','💪','🧘','🏋️'];
-      const firstImages = {
-        day1: 'images/bench-press.jpg', day2: 'images/pull-ups.jpg',
-        day3: 'images/squat.jpg', day4: 'images/overhead-press.jpg',
-        day5: 'images/barbell-curl.jpg', day6: 'images/plank.jpg',
-        day7: 'images/deadlift.jpg'
-      };
-      grid.innerHTML = Array.from({length:7}, (_, i) => {
-        const dayKey = 'day'+(i+1);
-        const isToday = (getTodayDayIndex() === i+1);
-        return `
-        <a href="#day${i+1}" class="day-card${isToday?' today':''}">
-          ${isToday?'<span class="today-marker">TODAY</span>':''}
-          <img src="${firstImages[dayKey]}" class="card-preview-img" onerror="this.style.display='none'">
-          <div class="card-icon">${icons[i]}</div>
-          <div class="card-num">${i+1}</div>
-          <div class="card-label">${labels[i]}</div>
-        </a>`;
-      }).join('');
-    }
-
-    function getTodayDayIndex() {
-      const day = new Date().getDay(); // 0=Sun,1=Mon...
-      const map = {1:1,2:2,3:3,4:4,5:5,6:6,0:7}; // Mon=1, Sun=7
-      return map[day] || 1;
-    }
-
-    // ==================== HERO & STATS ====================
-    function updateHeroStats() {
-      const todayIdx = getTodayDayIndex();
-      const dayNames = ['','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-      const dayWorkout = ['','Chest & Triceps','Back & Biceps','Legs','Shoulders','Arms','Core & Cardio','Full Body'];
-      document.getElementById('todayMessage').innerHTML = `📅 Today is <strong>${dayNames[todayIdx]}</strong> – <span style="color:#ffaa00;">${dayWorkout[todayIdx]}</span>`;
-
-      document.getElementById('streakDisplay').textContent = `🔥 ${getStreak()}`;
-      document.getElementById('totalXP').textContent = getTotalXP();
-      document.getElementById('levelDisplay').textContent = getLevel();
-    }
-
-    // ==================== PROGRESS DASHBOARD ====================
-    function updateDashboard() {
-      const completedDays = getCompletedDaysCount();
-      const percent = Math.round((completedDays/7)*100);
-      document.getElementById('ringPercent').textContent = percent+'%';
-      const circle = document.getElementById('progressCircle');
-      const circumference = 339.292;
-      circle.style.strokeDashoffset = circumference - (percent/100)*circumference;
-
-      const xp = getTotalXP();
-      const level = getLevel();
-      const xpForNext = level * 1000;
-      const currentLevelXP = (level-1)*1000;
-      const progressInLevel = xp - currentLevelXP;
-      const percentToNext = Math.min(100, (progressInLevel / 1000)*100);
-      document.getElementById('xpFill').style.width = percentToNext+'%';
-      document.getElementById('xpText').textContent = `${xp} XP / ${xpForNext} XP to level ${level+1}`;
-      renderBadges();
-    }
-
-    function getCompletedDaysCount() {
-      let count = 0;
-      for (let i=1; i<=7; i++) {
-        const checks = document.querySelectorAll(`.set-check[data-day="day${i}"]`);
-        if (checks.length && Array.from(checks).every(cb => cb.checked)) count++;
-      }
-      return count;
-    }
-
-    // ==================== XP & GAMIFICATION ====================
-    function addXP(amount) {
-      let xp = parseInt(localStorage.getItem('fitforge_xp')||'0');
-      xp += amount;
-      localStorage.setItem('fitforge_xp', xp);
-      updateHeroStats();
-      updateDashboard();
-    }
-
-    function getTotalXP() { return parseInt(localStorage.getItem('fitforge_xp')||'0'); }
-    function getLevel() { return Math.floor(getTotalXP()/1000)+1; }
-
-    function renderBadges() {
-      const badges = [];
-      const streak = getStreak();
-      if (streak >= 7) badges.push('🔥7Day');
-      if (streak >= 30) badges.push('⭐Month');
-      if (getTotalXP() >= 5000) badges.push('💪5K');
-      document.getElementById('badges').innerHTML = badges.map(b => `<span style="background:#ff6b00;color:#000;padding:4px 10px;border-radius:15px;">${b}</span>`).join('');
-    }
-
-    // ==================== ONBOARDING ====================
-    function checkOnboarding() {
-      if (!localStorage.getItem('fitforge_onboarded')) {
-        document.getElementById('onboardingModal').style.display = 'flex';
-      }
-    }
-    function closeOnboarding() {
-      localStorage.setItem('fitforge_onboarded', '1');
-      document.getElementById('onboardingModal').style.display = 'none';
-    }
-
-    // ==================== TODAY HIGHLIGHT & NAV ====================
-    function setupTodayHighlight() {
-      const todayIdx = getTodayDayIndex();
-      document.getElementById('todayNavLink').href = `#day${todayIdx}`;
-    }
-
-    // ==================== EXERCISE RENDERING & CHECKBOX LOGIC ====================
-    // (Keep your existing renderExercises, saveCheckboxState, etc. – exactly as before)
-    // Add XP increment on checkbox change:
-    document.addEventListener('change', function(e) {
-      if (e.target.classList.contains('set-check')) {
-        if (e.target.checked) addXP(10);
-        const day = e.target.dataset.day;
-        saveCheckboxState(day);
-        checkDayCompletion(day);
-        updateDashboard();
-      }
-    });
-
-    // Streak, water, timer, dark mode functions remain unchanged.
-    // Include all previous JS functions (timer, water, dark mode, share, etc.)
-  </script>
-</body>
-  </html>
+      day1: [
+        { name: "Barbell Bench Press", sets: 4, reps: "8-10", image: "images/bench-press.jpg", howto: "Lie flat, grip wider than shoulders, lower to mid-chest, press up.", icon: "🏋️", xp: 12 },
+        { name: "Incline Barbell Press", sets: 4, reps: "8-10", image: "images/incline-press.jpg", howto: "Bench at 30-45°, lower bar to upper chest, press up.", icon: "📐", xp: 12 },
+        { name: "Decline Barbell Press", sets: 3, reps: "10-12", image: "images/decline-press.jpg", howto: "Decline bench, lower bar to lower chest, press up.", icon: "📉", xp: 10 },
+        { name: "Dumbbell Flyes", sets: 3, reps: "12-15", image: "images/dumbbell-flyes.jpg", howto: "Lie flat, arms wide, slight bend, bring dumbbells together over chest.", icon: "🦅", xp: 8 },
+        { name: "Cable Crossover", sets: 3, reps: "12-15", image: "images/cable-crossover.jpg", howto: "High pulleys, step forward, pull cables down and across body.", icon: "🔗", xp: 8 },
+        { name: "Push-Ups", sets: 3, reps: "To Failure", image: "images/push-ups.jpg", howto: "Hands shoulder-width, lower body to ground, push up.", icon: "🤸", xp: 6 },
+        { name: "Tricep Dips", sets: 3, reps: "12-15", image: "images/tricep-dips.jpg", howto: "Parallel bars or bench, lower until 90°, push up.", icon: "⬇️", xp: 10 },
+        { name: "Tricep Pushdowns", sets: 3, reps: "12-15", image: "images/tricep-pushdown.jpg", howto: "Cable with bar/rope, elbows pinned, push down.", icon: "🔽", xp: 8 },
+        { name: "Skull Crushers", sets: 3, reps: "10-12", image: "images/skull-crushers.jpg", howto: "EZ-bar, lower to forehead, extend elbows.", icon: "💀", xp: 10 },
+        { name: "Close-Grip Bench Press", sets: 3, reps: "8-10", image: "images/close-grip-bench.jpg", howto: "Hands shoulder-width, elbows tucked, press from lower chest.", icon: "📏", xp: 10 }
+      ],
+      day2: [
+        { name: "Pull-Ups", sets: 4, reps: "6-10", image: "images/pull-ups.jpg", howto: "Overhand grip, pull chin above bar, lower controlled.", icon: "⬆️", xp: 15 },
+        { name: "Chin-Ups", sets: 3, reps: "8-10", image: "images/chin-ups.jpg", howto: "Underhand grip, pull chin above bar.", icon: "🤝", xp: 12 },
+        { name: "Barbell Row", sets: 4, reps: "8-10", image: "images/barbell-row.jpg", howto: "Bent over, pull bar to lower chest, squeeze blades.", icon: "🏋️", xp: 12 },
+        { name: "Seated Cable Row", sets: 3, reps: "10-12", image: "images/seated-row.jpg", howto: "Pull handle to torso, squeeze back.", icon: "🪑", xp: 10 },
+        { name: "Lat Pulldown", sets: 3, reps: "10-12", image: "images/lat-pulldown.jpg", howto: "Wide grip, pull bar to upper chest.", icon: "🔽", xp: 10 },
+        { name: "Dumbbell Row", sets: 3, reps: "10-12", image: "images/dumbbell-row.jpg", howto: "One knee on bench, pull dumbbell to hip.", icon: "💪", xp: 10 },
+        { name: "Deadlift", sets: 4, reps: "6-8", image: "images/deadlift.jpg", howto: "Hip hinge, lift bar from floor, lock out.", icon: "🏋️‍♂️", xp: 20 },
+        { name: "Face Pulls", sets: 3, reps: "15-20", image: "images/face-pulls.jpg", howto: "Rope to face, external rotation.", icon: "🔄", xp: 8 },
+        { name: "Barbell Curl", sets: 3, reps: "10-12", image: "images/barbell-curl.jpg", howto: "Stand, curl bar, elbows fixed.", icon: "💪", xp: 8 },
+        { name: "Hammer Curl", sets: 3, reps: "12-15", image: "images/hammer-curl.jpg", howto: "Neutral grip, curl together.", icon: "🔨", xp: 8 },
+        { name: "Preacher Curl", sets: 3, reps: "10-12", image: "images/preacher-curl.jpg", howto: "Arms on pad, curl EZ-bar.", icon: "🧘", xp: 8 }
+      ],
+      day3: [
+        { name: "Barbell Squat", sets: 4, reps: "8-10", image: "images/squat.jpg", howto: "Bar on back, squat to parallel, drive up.", icon: "🦵", xp: 20 },
+        { name: "Front Squat", sets: 3, reps: "8-10", image: "images/front-squat.jpg", howto: "Bar on front delts, elbows high, squat.", icon: "🏋️", xp: 15 },
+        { name: "Leg Press", sets: 3, reps: "10-12", image: "images/leg-press.jpg", howto: "Machine, press platform, don't lock knees.", icon: "🪑", xp: 12 },
+        { name: "Walking Lunges", sets: 3, reps: "12 per leg", image: "images/lunges.jpg", howto: "Step forward, lower back knee.", icon: "🚶", xp: 10 },
+        { name: "Romanian Deadlift", sets: 3, reps: "10-12", image: "images/romanian-deadlift.jpg", howto: "Hinge, slight knee bend, lower bar.", icon: "🏋️‍♂️", xp: 12 },
+        { name: "Leg Curl", sets: 3, reps: "12-15", image: "images/leg-curl.jpg", howto: "Machine, curl heels to glutes.", icon: "🦿", xp: 8 },
+        { name: "Leg Extension", sets: 3, reps: "12-15", image: "images/leg-extension.jpg", howto: "Machine, extend legs, squeeze quads.", icon: "🦵", xp: 8 },
+        { name: "Calf Raises", sets: 4, reps: "15-20", image: "images/calf-raises.jpg", howto: "Standing or seated, raise heels.", icon: "🦶", xp: 6 },
+        { name: "Glute Bridge", sets: 3, reps: "15-20", image: "images/glute-bridge.jpg", howto: "Lying, lift hips, squeeze glutes.", icon: "🍑", xp: 8 },
+        { name: "Bulgarian Split Squat", sets: 3, reps: "10-12", image: "images/bulgarian-split-squat.jpg", howto: "Rear foot elevated, squat down.", icon: "🏋️", xp: 12 }
+      ],
+      day4: [
+        { name: "Overhead Press", sets: 4, reps: "8-10", image: "images/overhead-press.jpg", howto: "Barbell/dumbbells, press overhead.", icon: "🏋️", xp: 15 },
+        { name: "Arnold Press", sets: 3, reps: "10-12", image: "images/arnold-press.jpg", howto: "Rotate dumbbells as you press.", icon: "🔁", xp: 12 },
+        { name: "Lateral Raises", sets: 3, reps: "12-15", image: "images/lateral-raises.jpg", howto: "Raise to sides, slight bend.", icon: "🕊️", xp: 8 },
+        { name: "Front Raises", sets: 3, reps: "12-15", image: "images/front-raises.jpg", howto: "Raise dumbbells to front.", icon: "📤", xp: 8 },
+        { name: "Rear Delt Flyes", sets: 3, reps: "15-20", image: "images/rear-de
