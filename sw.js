@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fitforge-v1';
+const CACHE_NAME = 'fitforge-v2'; // <-- changed version
 const urlsToCache = [
   '.',
   'index.html',
@@ -8,6 +8,14 @@ const urlsToCache = [
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
+  );
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(keys => Promise.all(
+      keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+    ))
   );
 });
 
